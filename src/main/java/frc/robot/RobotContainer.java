@@ -23,11 +23,12 @@ public class RobotContainer {
 
   private final DrivebaseSubsystem m_drivebaseSubsystem = new DrivebaseSubsystem();
 
-  private final DrivebaseCommand m_autoCommand = new DrivebaseCommand(m_drivebaseSubsystem);
-
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
+
+    m_drivebaseSubsystem.setDefaultCommand(new DrivebaseCommand(m_drivebaseSubsystem, controller_1.getLeftY(), controller_1.getLeftX(), controller_1.getRightX()));
+
     configureButtonBindings();
   }
 
@@ -46,6 +47,11 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    return null;
+  }
+
+  private static double squareInputs(double value) {
+    value = Math.copySign(value*value, value);
+    return value;
   }
 }
