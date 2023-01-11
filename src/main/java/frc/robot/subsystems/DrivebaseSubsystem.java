@@ -13,13 +13,22 @@ public class DrivebaseSubsystem extends SubsystemBase {
   private MecanumDrive mecanumDrive;
   private MotorController m_frontLeft, m_frontRight, m_backLeft, m_backRight;
 
-  public DrivebaseSubsystem() {
+  public DrivebaseSubsystem(MotorController frontLeft, MotorController frontRight, MotorController backLeft, MotorController backRight) {
+
+    m_frontLeft = frontLeft;
+    m_frontRight = frontRight;
+    m_backLeft = backLeft;
+    m_backRight = backRight;
 
     mecanumDrive = new MecanumDrive(m_frontLeft, m_backLeft, m_frontRight, m_backRight);
 
   }
 
-  
+  public void driveMecanum(double speedY, double speedX, double rotX) {
+
+    mecanumDrive.driveCartesian(speedY, speedX, rotX);
+
+  }
 
   @Override
   public void periodic() {
