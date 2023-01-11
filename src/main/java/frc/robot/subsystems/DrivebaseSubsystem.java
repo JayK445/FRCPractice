@@ -14,9 +14,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
   private MotorController m_frontLeft, m_frontRight, m_backLeft, m_backRight;
 
   public DrivebaseSubsystem() {
-
-
-
+    
     mecanumDrive = new MecanumDrive(m_frontLeft, m_backLeft, m_frontRight, m_backRight);
 
   }
