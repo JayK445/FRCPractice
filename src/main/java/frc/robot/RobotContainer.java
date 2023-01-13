@@ -22,13 +22,15 @@ public class RobotContainer {
   private final XboxController controller_1 = new XboxController(0);
 
   private final DrivebaseSubsystem m_drivebaseSubsystem = new DrivebaseSubsystem();
+  
+
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-    m_drivebaseSubsystem.setDefaultCommand(new DrivebaseCommand(m_drivebaseSubsystem, controller_1.getLeftY(), controller_1.getLeftX(), controller_1.getRightY()));
+    m_drivebaseSubsystem.setDefaultCommand(new DrivebaseCommand(m_drivebaseSubsystem, controller_1::getLeftY, controller_1::getLeftX, controller_1::getRightY));
 
   }
 

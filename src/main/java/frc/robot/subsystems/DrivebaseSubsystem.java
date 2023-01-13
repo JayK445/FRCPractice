@@ -4,29 +4,44 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.motorcontrol.PWMVictorSPX;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 
 public class DrivebaseSubsystem extends SubsystemBase {
   
   private MecanumDrive mecanumDrive;
-  private PWMVictorSPX m_frontLeft, m_frontRight, m_backLeft, m_backRight;
+  private TalonSRX m_frontLeft, m_frontRight, m_backLeft, m_backRight;
+ 
 
   public DrivebaseSubsystem() {
     // construct motors
     
-    m_frontLeft = new PWMVictorSPX(3);//port numbers in parentheses
-    m_frontRight = new PWMVictorSPX(1);
-    m_backLeft = new PWMVictorSPX(6);
-    m_backRight = new PWMVictorSPX(7);
-    
-    mecanumDrive = new MecanumDrive(m_frontLeft, m_backLeft, m_frontRight, m_backRight);
+    m_frontLeft = new TalonSRX(3);//port numbers in parentheses
+    m_frontRight = new TalonSRX(1);
+    m_backLeft = new TalonSRX(6);
+    m_backRight = new TalonSRX(7);
+   
 
   }
 
   public void driveCartesian (double ySpeed, double xSpeed, double zRotation){
-    mecanumDrive.driveCartesian(ySpeed, xSpeed, zRotation);
+    //mecanumDrive.driveCartesian(ySpeed, xSpeed, zRotation);
+
+    m_frontLeft.set(ControlMode.PercentOutput, ySpeed);
+    m_frontRight.set(ControlMode.PercentOutput, ySpeed);
+
+    m_backLeft.set(ControlMode.PercentOutput, ySpeed);
+
+    m_backRight.set(ControlMode.PercentOutput, ySpeed);
+
+
   }
 
   
