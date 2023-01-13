@@ -5,15 +5,18 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.DrivebaseSubsystem;
+
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
 public class DrivebaseCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final DrivebaseSubsystem m_subsystem;
-  private double speedY, speedX, rotX;
+  private DoubleSupplier speedY, speedX, rotX;
 
-  public DrivebaseCommand(DrivebaseSubsystem subsystem, double speedY, double speedX, double rotX) {
+  public DrivebaseCommand(DrivebaseSubsystem subsystem, DoubleSupplier speedY, DoubleSupplier speedX, DoubleSupplier rotX) {
     
     this.speedY = speedY;
     this.speedX = speedX;
@@ -28,7 +31,7 @@ public class DrivebaseCommand extends CommandBase {
 
   @Override
   public void execute() {
-    m_subsystem.driveMecanum(speedY, speedX, rotX);
+    m_subsystem.driveMecanum(speedY.getAsDouble(), speedX.getAsDouble(), rotX.getAsDouble());
   }
 
   @Override

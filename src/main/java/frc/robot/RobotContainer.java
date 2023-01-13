@@ -27,7 +27,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
 
-    m_drivebaseSubsystem.setDefaultCommand(new DrivebaseCommand(m_drivebaseSubsystem, controller_1.getLeftY(), controller_1.getLeftX(), controller_1.getRightX()));
+    m_drivebaseSubsystem.setDefaultCommand(new DrivebaseCommand(m_drivebaseSubsystem, () -> (squareInputs(controller_1.getLeftY())), () -> (squareInputs(controller_1.getLeftX())), () -> (squareInputs(controller_1.getRightX()))));
 
     configureButtonBindings();
   }
@@ -51,6 +51,7 @@ public class RobotContainer {
   }
 
   private static double squareInputs(double value) {
+    
     value = Math.copySign(value*value, value);
     return value;
   }
