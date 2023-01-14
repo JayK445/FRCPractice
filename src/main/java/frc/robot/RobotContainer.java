@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DrivebaseCommand;
 import frc.robot.subsystems.DrivebaseSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.Button;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -22,16 +23,15 @@ public class RobotContainer {
   private final XboxController controller_1 = new XboxController(0);
 
   private final DrivebaseSubsystem m_drivebaseSubsystem = new DrivebaseSubsystem();
-  
-
-
+  private final DrivebaseCommand m_DrivebaseCommand = new DrivebaseCommand(m_drivebaseSubsystem, controller_1::getLeftY, controller_1::getLeftX, controller_1::getRightY);
+  private boolean isButtonPressed;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-    m_drivebaseSubsystem.setDefaultCommand(new DrivebaseCommand(m_drivebaseSubsystem, controller_1::getLeftY, controller_1::getLeftX, controller_1::getRightY));
-
+    m_drivebaseSubsystem.setDefaultCommand(m_DrivebaseCommand);
+    m_DrivebaseCommand.invertMotors(isButtonPressed);
   }
 
   /**
@@ -41,7 +41,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-      new Button(controller_1::getXButton).whenPressed()); 
+    isButtonPressed = controller_1.getXButton();
   }
 
   /**

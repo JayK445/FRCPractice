@@ -8,6 +8,7 @@ import frc.robot.subsystems.DrivebaseSubsystem;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase; 
@@ -19,10 +20,7 @@ public class DrivebaseCommand extends CommandBase {
   private DoubleSupplier ySpeed;
   private DoubleSupplier xSpeed;
   private DoubleSupplier zRotation;
-
   private ShuffleboardTab tab;
-
-  
 
   /**
    * Creates a new ExampleCommand.
@@ -46,11 +44,14 @@ public class DrivebaseCommand extends CommandBase {
     addRequirements(subsystem);
   }
 
+  public void invertMotors(Boolean isPressed){
+    if (isPressed){
+      m_subsystem.invertMotors();
+    }
+  }
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
-   
 
   }
 
@@ -58,6 +59,7 @@ public class DrivebaseCommand extends CommandBase {
   @Override
   public void execute(){
     m_subsystem.driveCartesian(ySpeed.getAsDouble(), xSpeed.getAsDouble(), zRotation.getAsDouble());
+    
   }
 
   // Called once the command ends or is interrupted.
