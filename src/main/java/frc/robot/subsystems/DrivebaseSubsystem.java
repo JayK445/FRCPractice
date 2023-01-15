@@ -26,6 +26,10 @@ public class DrivebaseSubsystem extends SubsystemBase {
     m_backLeft = new TalonSRX(6);
     m_backRight = new TalonSRX(7);
     
+
+    //mecanumDrive = new MecanumDrive(m_frontLeft, m_backLeft, m_frontRight, m_backRight);
+   
+
   }
 
   public void driveCartesian (double ySpeed, double xSpeed, double zRotation){
@@ -36,12 +40,14 @@ public class DrivebaseSubsystem extends SubsystemBase {
     m_backLeft.set(ControlMode.PercentOutput, ySpeed);
     m_backRight.set(ControlMode.PercentOutput, ySpeed);
   }
-  
-  public void invertMotors(){
-    invertedMotor = m_frontLeft.getInverted();
-    m_frontRight.setInverted(invertedMotor);
-    m_backRight.setInverted(invertedMotor);
-    
+
+  public void InvertMotors(){
+    m_frontRight.setInverted(true);
+    m_backRight.setInverted(true);
+  }
+  public void UninvertMotors(){
+    m_frontRight.setInverted(false);
+    m_backRight.setInverted(false);
   }
 
   @Override
@@ -52,5 +58,9 @@ public class DrivebaseSubsystem extends SubsystemBase {
   @Override
   public void simulationPeriodic() {
     
+  }
+
+  public Object invertMotors() {
+    return null;
   }
 }
