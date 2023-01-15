@@ -8,39 +8,26 @@ import frc.robot.subsystems.DrivebaseSubsystem;
 
 import java.util.function.DoubleSupplier;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase; 
 
 /** An example command that uses an example subsystem. */
-public class DrivebaseCommand extends CommandBase {
+public class InvertMotors extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private DrivebaseSubsystem m_subsystem;
-  private DoubleSupplier ySpeed;
-  private DoubleSupplier xSpeed;
-  private DoubleSupplier zRotation;
-
-  private ShuffleboardTab tab;
-
   
-
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public DrivebaseCommand(DrivebaseSubsystem subsystem, DoubleSupplier ySpeed, DoubleSupplier xSpeed, DoubleSupplier zRotation) {
+  public InvertMotors(DrivebaseSubsystem subsystem) {
     m_subsystem = subsystem;
-    this.ySpeed = ySpeed;
-    this.xSpeed = xSpeed;
-    this.zRotation = zRotation;
 
-    tab = Shuffleboard.getTab("Drivebase");
-
-    tab.addNumber("ySpeed", this.ySpeed);
-    tab.addNumber("xSpeed", this.xSpeed);
-    tab.addNumber("zRotation", this.zRotation);
-
+    
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
@@ -49,16 +36,15 @@ public class DrivebaseCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
-   
-
+    m_subsystem.InvertMotors();
+  
   }
 
   // Ca lled every time the scheduler runs while the command is scheduled.
   @Override
   public void execute(){
-    m_subsystem.driveCartesian(ySpeed.getAsDouble(), xSpeed.getAsDouble(), zRotation.getAsDouble());
-  }
+
+    }  
 
   // Called once the command ends or is interrupted.
   @Override

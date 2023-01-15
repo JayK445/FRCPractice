@@ -7,8 +7,12 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DrivebaseCommand;
+import frc.robot.commands.InvertMotors;
+import frc.robot.commands.UninvertMotors;
+
 import frc.robot.subsystems.DrivebaseSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.Button;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -31,7 +35,6 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
     m_drivebaseSubsystem.setDefaultCommand(new DrivebaseCommand(m_drivebaseSubsystem, controller_1::getLeftY, controller_1::getLeftX, controller_1::getRightY));
-
   }
 
   /**
@@ -41,7 +44,11 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-      new Button(controller_1::getXButton).whenPressed()); 
+
+    new Button(controller_1::getXButton).toggleWhenPressed(new InvertMotors(m_drivebaseSubsystem));
+    new Button(controller_1::getYButton).toggleWhenPressed(new UninvertMotors(m_drivebaseSubsystem));
+
+
   }
 
   /**

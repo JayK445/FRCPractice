@@ -27,8 +27,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
     m_frontRight = new TalonSRX(1);
     m_backLeft = new TalonSRX(6);
     m_backRight = new TalonSRX(7);
-    m_frontRight.setInverted(true);
-    m_backRight.setInverted(true);
+    
 
     //mecanumDrive = new MecanumDrive(m_frontLeft, m_backLeft, m_frontRight, m_backRight);
    
@@ -48,7 +47,14 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   }
 
-  
+  public void InvertMotors(){
+    m_frontRight.setInverted(true);
+    m_backRight.setInverted(true);
+  }
+  public void UninvertMotors(){
+    m_frontRight.setInverted(false);
+    m_backRight.setInverted(false);
+  }
 
   @Override
   public void periodic() {
@@ -58,5 +64,9 @@ public class DrivebaseSubsystem extends SubsystemBase {
   @Override
   public void simulationPeriodic() {
     
+  }
+
+  public Object invertMotors() {
+    return null;
   }
 }
