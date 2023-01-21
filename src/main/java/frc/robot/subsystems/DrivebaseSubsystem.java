@@ -4,9 +4,9 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.TalonMecanumDrive;
@@ -49,6 +49,10 @@ public class DrivebaseSubsystem extends SubsystemBase {
     this.targetAngle = targetAngle;
     mode = DriveMode.ANGLE;
   }
+  
+  public Rotation2d getGyroRotation() {
+    return null;
+  }
 
   public DriveMode getMode() {
     return mode;
@@ -66,7 +70,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
   }
 
   private void anglePeriodic() {
-
+    
   }
 
   @Override
