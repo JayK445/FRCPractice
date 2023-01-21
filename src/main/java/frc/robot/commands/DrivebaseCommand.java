@@ -31,7 +31,7 @@ public class DrivebaseCommand extends CommandBase {
 
   @Override
   public void execute() {
-    m_subsystem.driveMecanum(speedY.getAsDouble(), speedX.getAsDouble(), rotX.getAsDouble());
+    m_subsystem.drive(speedY.getAsDouble(), speedX.getAsDouble(), rotX.getAsDouble());
   }
 
   @Override
