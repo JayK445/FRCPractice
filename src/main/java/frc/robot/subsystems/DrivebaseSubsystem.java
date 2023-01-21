@@ -9,9 +9,19 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import frc.robot.TalonMecanumDrive;
+
 public class DrivebaseSubsystem extends SubsystemBase {
   
   private TalonSRX m_frontLeft, m_frontRight, m_backLeft, m_backRight;
+  private TalonMecanumDrive m_mecanumDrive;
+  private double speedY, speedX, rotX, targetAngle;
+
+  private enum DriveMode {
+    DEFAULT, ANGLE
+  }
+
+  private DriveMode mode = DriveMode.DEFAULT;
 
   public DrivebaseSubsystem() {
 
@@ -20,31 +30,54 @@ public class DrivebaseSubsystem extends SubsystemBase {
     m_backLeft = new TalonSRX(6);
     m_backRight = new TalonSRX(7);
 
+    m_frontRight.setInverted(true);
+    m_backRight.setInverted(true);
+
+    m_mecanumDrive = new TalonMecanumDrive(m_frontLeft, m_backLeft, m_frontRight, m_backRight);
   }
 
-  public void driveMecanum(double speedY, double speedX, double rotX) {
+  public void drive(double speedY, double speedX, double rotX) {
+    this.speedY = speedY;
+    this.speedX = speedX;
+    this.rotX = rotX;
+    mode = DriveMode.DEFAULT;
+  }
 
-    if(speedY >= 0.1 || speedY <= 0.1) {
-      m_frontLeft.set(TalonSRXControlMode.PercentOutput, speedY);
-      m_frontRight.set(TalonSRXControlMode.PercentOutput, -speedY);
-      m_backLeft.set(TalonSRXControlMode.PercentOutput, speedY);
-      m_backRight.set(TalonSRXControlMode.PercentOutput, -speedY);
-    } else if(speedX >= 0.1 || speedX <= 0.1) {
-      m_frontLeft.set(TalonSRXControlMode.PercentOutput, speedY);
-      m_frontRight.set(TalonSRXControlMode.PercentOutput, -speedY);
-      m_backLeft.set(TalonSRXControlMode.PercentOutput, -speedY);
-      m_backRight.set(TalonSRXControlMode.PercentOutput, speedY);
-    } else if(rotX >= 0.1 || rotX <= 0.1) {
-      m_frontLeft.set(TalonSRXControlMode.PercentOutput, rotX);
-      m_frontRight.set(TalonSRXControlMode.PercentOutput, rotX);
-      m_backLeft.set(TalonSRXControlMode.PercentOutput, rotX);
-      m_backRight.set(TalonSRXControlMode.PercentOutput, rotX);
+  public void driveAngle(double speedY, double speedX, double targetAngle) {
+    this.speedY = speedY;
+    this.speedX = speedX;
+    this.targetAngle = targetAngle;
+    mode = DriveMode.ANGLE;
+  }
+
+  public DriveMode getMode() {
+    return mode;
+  }
+
+  public void switchMode() {
+    switch(mode) {
+      case DEFAULT : mode = DriveMode.ANGLE; break;
+      case ANGLE : mode = DriveMode.DEFAULT; break;
     }
+  }
+
+  private void defaultPeriodic() {
+    m_mecanumDrive.driveCartesian(speedY, speedX, rotX);
+  }
+
+  private void anglePeriodic() {
+
   }
 
   @Override
   public void periodic() {
     
+    DriveMode currentMode = getMode();
+    switch(currentMode) {
+      case DEFAULT : defaultPeriodic();
+      case ANGLE : anglePeriodic();
+    }
+
   }
 
   @Override
