@@ -7,8 +7,8 @@ package frc.robot.commands;
 import frc.robot.subsystems.DrivebaseSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase; 
 
-/** An example command that uses an example subsystem. */
-public class InvertMotors extends CommandBase {
+// An example command that uses an example subsystem.
+public class ToggleMotorInvert extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private DrivebaseSubsystem m_subsystem;
   
@@ -18,7 +18,7 @@ public class InvertMotors extends CommandBase {
    * @param subsystem The subsystem used by this command.
    */
 
-  public InvertMotors(DrivebaseSubsystem subsystem) {
+  public ToggleMotorInvert(DrivebaseSubsystem subsystem) {
     m_subsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
@@ -27,7 +27,7 @@ public class InvertMotors extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_subsystem.InvertMotors();
+    m_subsystem.ToggleInvert(); 
   }
 
   // Called every time the scheduler runs while the command is scheduled.
