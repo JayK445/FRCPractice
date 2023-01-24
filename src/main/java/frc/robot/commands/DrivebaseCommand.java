@@ -35,7 +35,9 @@ public class DrivebaseCommand extends CommandBase {
   }
 
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_subsystem.drive(0, 0, 0);
+  }
 
   @Override
   public boolean isFinished() {
