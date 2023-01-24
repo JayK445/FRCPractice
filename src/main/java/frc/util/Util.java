@@ -6,6 +6,14 @@ public class Util {
 
     private Util() {}
 
+    public static boolean epsilonEquals(double a, double b, double epsilon) {
+      return (a - epsilon <= b) && (a + epsilon >= b);
+    }
+  
+    public static boolean epsilonZero(double a, double epsilon) {
+      return epsilonEquals(a, 0, epsilon);
+    }
+
     public static double normalizeDegrees(double degrees) {
         degrees %= 360;
         degrees += 360;
