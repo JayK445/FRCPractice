@@ -70,18 +70,25 @@ public class DrivebaseSubsystem extends SubsystemBase {
   }
 
   private void anglePeriodic() {
-    
+    double angleDifference = Util.relativeAngularDifference(getGyroRotation(), targetAngle);
+    double rotationValue = controller.calculate(angleDifference);
+
+    rotationValue = MathUtil.clamp(rotationValue, -1, 1);
+
+    m_mecanumDrive.driveCartesian(speedY, speedX, rotationValue);
+
   }
 
   @Override
   public void periodic() {
     
+    updateRotVelocity();
+
     DriveMode currentMode = getMode();
     switch(currentMode) {
       case DEFAULT : defaultPeriodic();
       case ANGLE : anglePeriodic();
     }
-
   }
 
   @Override
