@@ -4,12 +4,15 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DrivebaseSubsystem;
+import frc.util.Util;
 
 public class AngleDriveCommand extends CommandBase{
 
-    DrivebaseSubsystem subsystem;
-    DoubleSupplier leftX, leftY, rightX, rightY;
-    double angle;
+    private DrivebaseSubsystem subsystem;
+    private DoubleSupplier leftX, leftY, rightX, rightY;
+    private double angle;
+    private double[] angles = {0, 45, 90, 135, 180, 225, 270, 315};
+    
     
     public AngleDriveCommand(DrivebaseSubsystem subsystem, DoubleSupplier leftX, DoubleSupplier leftY, DoubleSupplier rightX, DoubleSupplier rightY) {
         
@@ -24,28 +27,32 @@ public class AngleDriveCommand extends CommandBase{
 
     @Override
     public void initialize() {
-
         angle = subsystem.getGyroRotation().getDegrees();
-
     }
 
     @Override
     public void execute() {
+        double lX = leftX.getAsDouble();
+        double lY = leftY.getAsDouble();
+        double rX = rightX.getAsDouble();
+        double rY = rightY.getAsDouble();
 
-        if( > 0.7) {
-
+        if(Util.vectorMagnitude(rX, rY) > 0.7) {
+            angle = Util.angleSnap(Util.vectorToAngle(rX, rY), angles);
         }
-
+        subsystem.driveAngle(lY, lX, angle);
     }
 
     @Override 
     public void end(boolean interrupted) {
-
+        subsystem.drive(0, 0, 0);
     }
 
     @Override
     public boolean isFinished() {
-        return false;
+        return Util.epsilonZero(Util.relativeAngularDifference(subsystem.getGyroRotation(), angle), 1) 
+        && Util.vectorMagnitude(rightX.getAsDouble(), rightY.getAsDouble()) <= 0.7 
+        && Util.epsilonEquals(subsystem.getRotVelocity(), 0, 10);
     }
 
 }
