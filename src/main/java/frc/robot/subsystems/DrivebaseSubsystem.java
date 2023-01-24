@@ -6,16 +6,24 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.TalonMecanumDrive;
+import frc.util.Util;
 
 public class DrivebaseSubsystem extends SubsystemBase {
   
   private TalonSRX m_frontLeft, m_frontRight, m_backLeft, m_backRight;
   private TalonMecanumDrive m_mecanumDrive;
-  private double speedY, speedX, rotX, targetAngle;
+  private ADXRS450_Gyro gyro;
+  private double speedY, speedX, rotX, targetAngle, rotVelocity, lastAngle, lastTime;
+  private PIDController controller;
 
   private enum DriveMode {
     DEFAULT, ANGLE
@@ -34,6 +42,14 @@ public class DrivebaseSubsystem extends SubsystemBase {
     m_backRight.setInverted(true);
 
     m_mecanumDrive = new TalonMecanumDrive(m_frontLeft, m_backLeft, m_frontRight, m_backRight);
+
+    gyro = new ADXRS450_Gyro(Port.kMXP);
+
+    controller = new PIDController(0.03, 0, 0.003);
+    controller.setSetpoint(0);
+    controller.setTolerance(1);
+
+    zeroGyro();
   }
 
   public void drive(double speedY, double speedX, double rotX) {
@@ -49,9 +65,28 @@ public class DrivebaseSubsystem extends SubsystemBase {
     this.targetAngle = targetAngle;
     mode = DriveMode.ANGLE;
   }
+
+  private void updateRotVelocity() {
+    double time = Timer.getFPGATimestamp();
+    double angle = getGyroRotation().getDegrees();
+    rotVelocity = (angle - lastAngle) / (time - lastTime);
+    lastTime = time;
+    lastAngle = angle;
+  }
+
+  public double getRotVelocity() {
+    return rotVelocity;
+  }
+
+  public void zeroGyro() {
+    gyro.reset();
+  }
   
   public Rotation2d getGyroRotation() {
-    return null;
+
+    double angle = Util.normalizeDegrees(gyro.getAngle());
+
+    return Rotation2d.fromDegrees(angle);
   }
 
   public DriveMode getMode() {
