@@ -6,19 +6,22 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.DrivebaseSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import java.util.function.DoubleSupplier;
 
 /** An example command that uses an example subsystem. */
 public class DrivebaseCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final DrivebaseSubsystem m_subsystem;
+  private DoubleSupplier speed;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public DrivebaseCommand(DrivebaseSubsystem subsystem) {
+  public DrivebaseCommand(DrivebaseSubsystem subsystem, DoubleSupplier speed) {
     m_subsystem = subsystem;
+    this.speed = speed;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -29,7 +32,9 @@ public class DrivebaseCommand extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_subsystem.drive(speed.getAsDouble());
+  }
 
   // Called once the command ends or is interrupted.
   @Override
