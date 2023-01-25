@@ -63,6 +63,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
     this.speedY = speedY;
     this.speedX = speedX;
     this.targetAngle = targetAngle;
+    if(mode != DriveMode.ANGLE) controller.reset();
     mode = DriveMode.ANGLE;
   }
 
