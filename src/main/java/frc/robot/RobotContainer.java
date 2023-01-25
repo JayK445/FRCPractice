@@ -42,7 +42,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    new Button(controller_1::getRightStickButton).whenPressed(new AngleDriveCommand(m_drivebaseSubsystem, 
+    new Button(controller_1::getRightStickButton).whileHeld(new AngleDriveCommand(m_drivebaseSubsystem, 
     controller_1::getLeftX, controller_1::getLeftY, controller_1::getRightX, controller_1::getRightY));
 
   }
