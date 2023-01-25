@@ -45,7 +45,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
     gyro = new ADXRS450_Gyro(Port.kMXP);
 
-    controller = new PIDController(0.03, 0, 0.003);
+    controller = new PIDController(0.005, 0, 0.001);
     controller.setSetpoint(0);
     controller.setTolerance(1);
 
