@@ -7,6 +7,9 @@ package frc.robot.commands;
 import frc.robot.subsystems.DrivebaseSubsystem;
 
 import java.util.function.DoubleSupplier;
+
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase; 
 
 /** An example command that uses an example subsystem. */
@@ -16,6 +19,7 @@ public class DrivebaseCommand extends CommandBase {
   private DoubleSupplier ySpeed;
   private DoubleSupplier xSpeed;
   private DoubleSupplier zRotation;
+  private ShuffleboardTab tab = Shuffleboard.getTab("Drivebase");
 
   /**
    * Creates a new ExampleCommand.
@@ -29,10 +33,10 @@ public class DrivebaseCommand extends CommandBase {
     this.xSpeed = xSpeed;
     this.zRotation = zRotation;
 
-    /*tab = Shuffleboard.getTab("Drivebase");
+    tab = Shuffleboard.getTab("Drivebase");
     tab.addNumber("ySpeed", this.ySpeed);
     tab.addNumber("xSpeed", this.xSpeed);
-    tab.addNumber("zRotation", this.zRotation);*/
+    tab.addNumber("zRotation", this.zRotation);
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
