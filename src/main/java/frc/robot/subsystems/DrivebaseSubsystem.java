@@ -20,13 +20,11 @@ public class DrivebaseSubsystem extends SubsystemBase {
     //mecanumDrive = new MecanumDrive(m_frontLeft, m_backLeft, m_frontRight, m_backRight);
   }
 
-  public void driveCartesian (double ySpeed, double xSpeed, double zRotation){
+  public void drive (double ySpeed, double xSpeed, double zRotation){
     m_frontLeft.set(ControlMode.PercentOutput, ySpeed);
     m_frontRight.set(ControlMode.PercentOutput, ySpeed);
     m_backLeft.set(ControlMode.PercentOutput, ySpeed);
     m_backRight.set(ControlMode.PercentOutput, ySpeed);
-    //m_backRight.follow(m_backLeft);
-    //m_frontRight.follow(m_frontLeft);
   }
 
   public void InvertMotors(){
@@ -49,8 +47,4 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   @Override
   public void simulationPeriodic() {}
-
-  public Object invertMotors() {
-    return null;
-  }
 }

@@ -42,9 +42,9 @@ public class DrivebaseCommand extends CommandBase {
     addRequirements(subsystem);
   }
 
-  public void invertMotors(Boolean isPressed){
+  public void InvertMotors(Boolean isPressed){
     if (isPressed){
-      m_subsystem.invertMotors();
+      m_subsystem.InvertMotors();
     }
   }
   // Called when the command is initially scheduled.
@@ -54,7 +54,7 @@ public class DrivebaseCommand extends CommandBase {
   // Ca lled every time the scheduler runs while the command is scheduled.
   @Override
   public void execute(){
-    m_subsystem.driveCartesian(ySpeed.getAsDouble(), xSpeed.getAsDouble(), zRotation.getAsDouble());
+    m_subsystem.drive(ySpeed.getAsDouble(), xSpeed.getAsDouble(), zRotation.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.

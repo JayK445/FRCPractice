@@ -33,7 +33,8 @@ public class ArmSubsystem extends SubsystemBase{
     public void initialize(){}
 
     public void periodic(){
-        ArmMotor.set(TalonFXControlMode.PercentOutput, MathUtil.clamp(m_PIDController.calculate(ArmMotor.getSelectedSensorPosition(), DesiredAngle), -0.1, 0.1));
+        ArmMotor.set(TalonFXControlMode.PercentOutput, 
+        MathUtil.clamp(m_PIDController.calculate(ArmMotor.getSelectedSensorPosition(), DesiredAngle), -0.1, 0.1));
     }
 
     public void simulationPeriodic(){}

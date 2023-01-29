@@ -8,6 +8,7 @@ import frc.robot.subsystems.DrivebaseSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase; 
 
 // An example command that uses an example subsystem.
+//This command does not currently work
 public class ToggleMotorInvert extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private DrivebaseSubsystem m_subsystem;
