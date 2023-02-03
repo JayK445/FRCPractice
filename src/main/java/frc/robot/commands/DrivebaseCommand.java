@@ -39,7 +39,7 @@ public class DrivebaseCommand extends CommandBase {
     tab.addNumber("zRotation", this.zRotation);
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(subsystem);
+    addRequirements(m_subsystem);
   }
 
   public void InvertMotors(Boolean isPressed){
@@ -51,7 +51,7 @@ public class DrivebaseCommand extends CommandBase {
   @Override
   public void initialize() {}
 
-  // Ca lled every time the scheduler runs while the command is scheduled.
+  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute(){
     m_subsystem.drive(ySpeed.getAsDouble(), xSpeed.getAsDouble(), zRotation.getAsDouble());
