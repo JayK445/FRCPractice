@@ -5,22 +5,16 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.DrivebaseSubsystem;
-
-import java.util.function.DoubleSupplier;
-
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup; 
 
 /** An example command that uses an example subsystem. */
-public class DrivebaseCommand extends SequentialCommandGroup {
+public class TimedDrivebaseCommand extends SequentialCommandGroup {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private DrivebaseSubsystem m_subsystem;
-  private DoubleSupplier ySpeed;
-  private DoubleSupplier xSpeed;
-  private DoubleSupplier zRotation;
-
-  private ShuffleboardTab tab = Shuffleboard.getTab("Drivebase");
+  private double desiredSpeed;
+  private double m_Time;
+  private double duration;
 
   /**
    * Creates a new ExampleCommand.
@@ -28,16 +22,12 @@ public class DrivebaseCommand extends SequentialCommandGroup {
    * @param subsystem The subsystem used by this command.
    */
   
-  public DrivebaseCommand(DrivebaseSubsystem subsystem, DoubleSupplier ySpeed, DoubleSupplier xSpeed, DoubleSupplier zRotation) {
+  public TimedDrivebaseCommand(DrivebaseSubsystem subsystem, double desiredSpeed, double duration) {
     m_subsystem = subsystem;
-    this.ySpeed = ySpeed;
-    this.xSpeed = xSpeed;
-    this.zRotation = zRotation;
+    this.desiredSpeed = desiredSpeed;
+    this.duration = duration;
 
-    tab = Shuffleboard.getTab("Drivebase");
-    tab.addNumber("ySpeed", this.ySpeed);
-    tab.addNumber("xSpeed", this.xSpeed);
-    tab.addNumber("zRotation", this.zRotation);
+    m_Time = Timer.getFPGATimestamp();
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_subsystem);
@@ -55,7 +45,7 @@ public class DrivebaseCommand extends SequentialCommandGroup {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute(){
-    m_subsystem.drive(ySpeed.getAsDouble(), xSpeed.getAsDouble(), zRotation.getAsDouble());
+    m_subsystem.drive(desiredSpeed, 0, 0);
   }
 
   // Called once the command ends or is interrupted.
@@ -65,6 +55,6 @@ public class DrivebaseCommand extends SequentialCommandGroup {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return Timer.getFPGATimestamp() >= m_Time +  duration;
   }
 }
