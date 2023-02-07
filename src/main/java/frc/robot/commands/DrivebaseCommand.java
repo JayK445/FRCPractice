@@ -10,10 +10,10 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup; 
+import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class DrivebaseCommand extends SequentialCommandGroup {
+public class DrivebaseCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private DrivebaseSubsystem m_subsystem;
   private DoubleSupplier ySpeed;

@@ -5,14 +5,15 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand; 
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.DrivebaseSubsystem; 
 
 /** An example command that uses an example subsystem. */
 public class SequentialCommand extends SequentialCommandGroup {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private TimedDrivebaseCommand m_TimedDrivebaseCommand;
-  private InvertMotors m_invertMotors;
-  private ArmCommand m_armCommand;
+  private DrivebaseSubsystem m_DrivebaseSubsystem;
+  private ArmSubsystem m_ArmSubsystem;
 
 
   /**
@@ -21,11 +22,11 @@ public class SequentialCommand extends SequentialCommandGroup {
    * @param subsystem The subsystem used by this command.
    */
   
-  public SequentialCommand(TimedDrivebaseCommand m_TimedDrivebaseCommand, InvertMotors m_invertMotors, ArmCommand m_armCommand) {
-    this.m_TimedDrivebaseCommand = m_TimedDrivebaseCommand;
-    this.m_invertMotors = m_invertMotors;
-    this.m_armCommand = m_armCommand;
+  public SequentialCommand(DrivebaseSubsystem drivebaseSubsystem, ArmSubsystem armSubsystem) {
+    m_DrivebaseSubsystem = drivebaseSubsystem;
+    m_ArmSubsystem = armSubsystem;
     
-    addCommands(m_TimedDrivebaseCommand, parallel(m_invertMotors, m_TimedDrivebaseCommand), new WaitCommand(0.5), m_TimedDrivebaseCommand, m_armCommand);
+    addCommands(new TimedDrivebaseCommand(m_DrivebaseSubsystem, 0.1, 0.5), new InvertMotors(m_DrivebaseSubsystem), new WaitCommand(0.5),
+    parallel(new TimedDrivebaseCommand(m_DrivebaseSubsystem, -0.1, 0.5), new ArmCommand(m_ArmSubsystem, 90, 0.5)));
   }
 }

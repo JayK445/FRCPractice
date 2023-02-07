@@ -5,15 +5,12 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.DrivebaseSubsystem;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup; 
+import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class InvertMotors extends SequentialCommandGroup {
+public class InvertMotors extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private DrivebaseSubsystem m_subsystem;
-  private double m_Time;
-  private double duration;
   
   /**
    * Creates a new ExampleCommand.
@@ -21,10 +18,8 @@ public class InvertMotors extends SequentialCommandGroup {
    * @param subsystem The subsystem used by this command.
    */
 
-  public InvertMotors(DrivebaseSubsystem subsystem, double duration) {
+  public InvertMotors(DrivebaseSubsystem subsystem) {
     m_subsystem = subsystem;
-    m_Time = Timer.getFPGATimestamp();
-    this.duration = duration;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -46,6 +41,6 @@ public class InvertMotors extends SequentialCommandGroup {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Timer.getFPGATimestamp() >= m_Time +  duration;
+    return true;
   }
 }

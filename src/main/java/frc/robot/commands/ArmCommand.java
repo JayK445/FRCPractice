@@ -6,10 +6,10 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.ArmSubsystem;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup; 
+import edu.wpi.first.wpilibj2.command.CommandBase;
 
 // An example command that uses an example subsystem.
-public class ArmCommand extends SequentialCommandGroup {
+public class ArmCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private ArmSubsystem m_subsystem;
   private double Target;

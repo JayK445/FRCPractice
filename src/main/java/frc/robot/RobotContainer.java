@@ -10,7 +10,6 @@ import frc.robot.commands.ArmCommand;
 import frc.robot.commands.DrivebaseCommand;
 import frc.robot.commands.InvertMotors;
 import frc.robot.commands.SequentialCommand;
-import frc.robot.commands.TimedDrivebaseCommand;
 import frc.robot.commands.ToggleMotorInvert;
 import frc.robot.commands.UninvertMotors;
 import frc.robot.subsystems.ArmSubsystem;
@@ -33,9 +32,8 @@ public class RobotContainer {
   private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
   private final DrivebaseCommand m_drivebaseCommand = new DrivebaseCommand(m_drivebaseSubsystem, controller_1::getLeftY, controller_1::getLeftX, controller_1::getRightY);
   private final ArmCommand m_armCommand = new ArmCommand(m_armSubsystem, 90, 0.5);
-  private final InvertMotors m_motorInvert = new InvertMotors(m_drivebaseSubsystem, 0.3);
-  private final TimedDrivebaseCommand m_timedDrivebaseCommand = new TimedDrivebaseCommand(m_drivebaseSubsystem, 0.1, 0.5);
-  private final SequentialCommand m_sequentialCommand = new SequentialCommand(m_timedDrivebaseCommand, m_motorInvert, m_armCommand);
+  private final InvertMotors m_motorInvert = new InvertMotors(m_drivebaseSubsystem);
+  private final SequentialCommand m_sequentialCommand = new SequentialCommand(m_drivebaseSubsystem, m_armSubsystem);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
@@ -52,7 +50,7 @@ public class RobotContainer {
    */
 
   private void configureButtonBindings() {
-    new Button(controller_1::getXButton).whenPressed(new InvertMotors(m_drivebaseSubsystem, 2));
+    new Button(controller_1::getXButton).whenPressed(m_motorInvert);
     new Button(controller_1::getYButton).whenPressed(new UninvertMotors(m_drivebaseSubsystem));
     new Button(controller_1::getAButton).whenPressed(new ToggleMotorInvert(m_drivebaseSubsystem));
     new Button(controller_1::getBButton).whenPressed(m_armCommand);

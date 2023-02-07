@@ -6,10 +6,10 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.DrivebaseSubsystem;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup; 
+import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class TimedDrivebaseCommand extends SequentialCommandGroup {
+public class TimedDrivebaseCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private DrivebaseSubsystem m_subsystem;
   private double desiredSpeed;
