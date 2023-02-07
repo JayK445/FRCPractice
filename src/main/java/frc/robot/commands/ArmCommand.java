@@ -6,24 +6,26 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.ArmSubsystem;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.CommandBase; 
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup; 
 
 // An example command that uses an example subsystem.
-public class ArmCommand extends CommandBase {
+public class ArmCommand extends SequentialCommandGroup {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private ArmSubsystem m_subsystem;
   private double Target;
   private double m_Time;
+  private double duration;
     
   /**
    * Creates a new ExampleCommand.
    * @param subsystem The subsystem used by this command.
    */
 
-  public ArmCommand(ArmSubsystem subsystem, double target) {
+  public ArmCommand(ArmSubsystem subsystem, double target, double duration) {
     m_Time = Timer.getFPGATimestamp();
     m_subsystem = subsystem;
     Target = target;
+    this.duration = duration;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -46,6 +48,6 @@ public class ArmCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_Time + 1 <= Timer.getFPGATimestamp();
+    return Timer.getFPGATimestamp() >= m_Time +  duration;
   }
 }

@@ -8,17 +8,20 @@ import frc.robot.subsystems.DrivebaseSubsystem;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj2.command.CommandBase; 
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup; 
 
 /** An example command that uses an example subsystem. */
-public class DrivebaseCommand extends CommandBase {
+public class DrivebaseCommand extends SequentialCommandGroup {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private DrivebaseSubsystem m_subsystem;
   private DoubleSupplier ySpeed;
   private DoubleSupplier xSpeed;
   private DoubleSupplier zRotation;
+  private double m_Time;
+  private double duration;
   private ShuffleboardTab tab = Shuffleboard.getTab("Drivebase");
 
   /**
@@ -27,12 +30,14 @@ public class DrivebaseCommand extends CommandBase {
    * @param subsystem The subsystem used by this command.
    */
   
-  public DrivebaseCommand(DrivebaseSubsystem subsystem, DoubleSupplier ySpeed, DoubleSupplier xSpeed, DoubleSupplier zRotation) {
+  public DrivebaseCommand(DrivebaseSubsystem subsystem, DoubleSupplier ySpeed, DoubleSupplier xSpeed, DoubleSupplier zRotation, double duration) {
     m_subsystem = subsystem;
     this.ySpeed = ySpeed;
     this.xSpeed = xSpeed;
     this.zRotation = zRotation;
+    this.duration = duration;
 
+    m_Time = Timer.getFPGATimestamp();
     tab = Shuffleboard.getTab("Drivebase");
     tab.addNumber("ySpeed", this.ySpeed);
     tab.addNumber("xSpeed", this.xSpeed);
@@ -64,6 +69,6 @@ public class DrivebaseCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return Timer.getFPGATimestamp() >= m_Time +  duration;
   }
 }
