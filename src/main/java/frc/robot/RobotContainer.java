@@ -32,9 +32,9 @@ public class RobotContainer {
   private final DrivebaseSubsystem m_drivebaseSubsystem = new DrivebaseSubsystem();
   private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
   private final DrivebaseCommand m_drivebaseCommand = new DrivebaseCommand(m_drivebaseSubsystem, controller_1::getLeftY, controller_1::getLeftX, controller_1::getRightY);
-  private final ArmCommand m_armCommand = new ArmCommand(m_armSubsystem, 90, 1);
-  private final InvertMotors m_motorInvert = new InvertMotors(m_drivebaseSubsystem, 3);
-  private final TimedDrivebaseCommand m_timedDrivebaseCommand = new TimedDrivebaseCommand(m_drivebaseSubsystem, 0.1, 2);
+  private final ArmCommand m_armCommand = new ArmCommand(m_armSubsystem, 90, 0.5);
+  private final InvertMotors m_motorInvert = new InvertMotors(m_drivebaseSubsystem, 0.3);
+  private final TimedDrivebaseCommand m_timedDrivebaseCommand = new TimedDrivebaseCommand(m_drivebaseSubsystem, 0.1, 0.5);
   private final SequentialCommand m_sequentialCommand = new SequentialCommand(m_timedDrivebaseCommand, m_motorInvert, m_armCommand);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
