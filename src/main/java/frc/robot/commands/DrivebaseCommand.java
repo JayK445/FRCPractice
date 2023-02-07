@@ -8,7 +8,6 @@ import frc.robot.subsystems.DrivebaseSubsystem;
 
 import java.util.function.DoubleSupplier;
 
-import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase; 
@@ -20,13 +19,14 @@ public class DrivebaseCommand extends CommandBase {
   private DoubleSupplier ySpeed;
   private DoubleSupplier xSpeed;
   private DoubleSupplier zRotation;
-  private ShuffleboardTab tab;
+  private ShuffleboardTab tab = Shuffleboard.getTab("Drivebase");
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
+  
   public DrivebaseCommand(DrivebaseSubsystem subsystem, DoubleSupplier ySpeed, DoubleSupplier xSpeed, DoubleSupplier zRotation) {
     m_subsystem = subsystem;
     this.ySpeed = ySpeed;
@@ -34,32 +34,27 @@ public class DrivebaseCommand extends CommandBase {
     this.zRotation = zRotation;
 
     tab = Shuffleboard.getTab("Drivebase");
-
     tab.addNumber("ySpeed", this.ySpeed);
     tab.addNumber("xSpeed", this.xSpeed);
     tab.addNumber("zRotation", this.zRotation);
 
-
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(subsystem);
+    addRequirements(m_subsystem);
   }
 
-  public void invertMotors(Boolean isPressed){
+  public void InvertMotors(Boolean isPressed){
     if (isPressed){
-      m_subsystem.invertMotors();
+      m_subsystem.InvertMotors();
     }
   }
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
+  public void initialize() {}
 
-  }
-
-  // Ca lled every time the scheduler runs while the command is scheduled.
+  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute(){
-    m_subsystem.driveCartesian(ySpeed.getAsDouble(), xSpeed.getAsDouble(), zRotation.getAsDouble());
-    
+    m_subsystem.drive(ySpeed.getAsDouble(), xSpeed.getAsDouble(), zRotation.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.

@@ -5,16 +5,9 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.DrivebaseSubsystem;
-
-import java.util.function.DoubleSupplier;
-
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase; 
 
-/** An example command that uses an example subsystem. */
+// An example command that uses an example subsystem.
 public class UninvertMotors extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private DrivebaseSubsystem m_subsystem;
@@ -24,11 +17,9 @@ public class UninvertMotors extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
+
   public UninvertMotors(DrivebaseSubsystem subsystem) {
     m_subsystem = subsystem;
-
-    
-
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -36,15 +27,12 @@ public class UninvertMotors extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_subsystem.UninvertMotors();
-  
+    m_subsystem.UninvertMotors(); 
   }
 
-  // Ca lled every time the scheduler runs while the command is scheduled.
+  // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute(){
-
-    }  
+  public void execute(){}  
 
   // Called once the command ends or is interrupted.
   @Override
