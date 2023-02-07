@@ -9,13 +9,13 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.DrivebaseCommand;
 import frc.robot.commands.InvertMotors;
+import frc.robot.commands.SequentialCommand;
 import frc.robot.commands.TimedDrivebaseCommand;
 import frc.robot.commands.ToggleMotorInvert;
 import frc.robot.commands.UninvertMotors;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivebaseSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Button;
 
 /**
@@ -35,6 +35,7 @@ public class RobotContainer {
   private final ArmCommand m_armCommand = new ArmCommand(m_armSubsystem, 90, 1);
   private final InvertMotors m_motorInvert = new InvertMotors(m_drivebaseSubsystem, 3);
   private final TimedDrivebaseCommand m_timedDrivebaseCommand = new TimedDrivebaseCommand(m_drivebaseSubsystem, 0.1, 2);
+  private final SequentialCommand m_sequentialCommand = new SequentialCommand(m_timedDrivebaseCommand, m_motorInvert, m_armCommand);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
@@ -55,7 +56,7 @@ public class RobotContainer {
     new Button(controller_1::getYButton).whenPressed(new UninvertMotors(m_drivebaseSubsystem));
     new Button(controller_1::getAButton).whenPressed(new ToggleMotorInvert(m_drivebaseSubsystem));
     new Button(controller_1::getBButton).whenPressed(m_armCommand);
-    new Button(controller_1::getRightBumper).whenPressed(new SequentialCommandGroup(m_armCommand, m_timedDrivebaseCommand, m_motorInvert));
+    new Button(controller_1::getRightBumper).whenPressed(m_sequentialCommand);
   }
 
   /**
