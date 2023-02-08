@@ -15,7 +15,7 @@ import frc.robot.commands.UninvertMotors;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivebaseSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.Button;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -26,8 +26,7 @@ import edu.wpi.first.wpilibj2.command.button.Button;
 
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-
-  private final XboxController controller_1 = new XboxController(0);
+  private final CommandXboxController controller_1 = new CommandXboxController(1);
   private final DrivebaseSubsystem m_drivebaseSubsystem = new DrivebaseSubsystem();
   private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
   private final DrivebaseCommand m_drivebaseCommand = new DrivebaseCommand(m_drivebaseSubsystem, controller_1::getLeftY, controller_1::getLeftX, controller_1::getRightY);
@@ -50,11 +49,11 @@ public class RobotContainer {
    */
 
   private void configureButtonBindings() {
-    new Button(controller_1::getXButton).whenPressed(m_motorInvert);
-    new Button(controller_1::getYButton).whenPressed(new UninvertMotors(m_drivebaseSubsystem));
-    new Button(controller_1::getAButton).whenPressed(new ToggleMotorInvert(m_drivebaseSubsystem));
-    new Button(controller_1::getBButton).whenPressed(m_armCommand);
-    new Button(controller_1::getRightBumper).whenPressed(m_sequentialCommand);
+    controller_1.x().onTrue(m_motorInvert);
+    controller_1.y().onTrue(new UninvertMotors(m_drivebaseSubsystem)); 
+    controller_1.a().onTrue(m_armCommand);
+    controller_1.b().onTrue(new ToggleMotorInvert(m_drivebaseSubsystem));
+    controller_1.rightBumper().onTrue((m_sequentialCommand));
   }
 
   /**

@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.ArmSubsystem;
@@ -25,9 +26,8 @@ public class SequentialCommand extends SequentialCommandGroup {
   public SequentialCommand(DrivebaseSubsystem drivebaseSubsystem, ArmSubsystem armSubsystem) {
     m_DrivebaseSubsystem = drivebaseSubsystem;
     m_ArmSubsystem = armSubsystem;
-    
     addCommands(new TimedDrivebaseCommand(m_DrivebaseSubsystem, 0.1, 0.5), new ToggleMotorInvert(m_DrivebaseSubsystem), 
     new TimedDrivebaseCommand(m_DrivebaseSubsystem, 0.25, 0.25), new WaitCommand(0.5), new ToggleMotorInvert(m_DrivebaseSubsystem), 
-    parallel(new TimedDrivebaseCommand(m_DrivebaseSubsystem, -0.1, 0.5), new ArmCommand(m_ArmSubsystem, 90, 0.5)));
+    Commands.parallel(new TimedDrivebaseCommand(m_DrivebaseSubsystem, -0.1, 0.5), new ArmCommand(m_ArmSubsystem, 90, 0.5)));
   }
 }
