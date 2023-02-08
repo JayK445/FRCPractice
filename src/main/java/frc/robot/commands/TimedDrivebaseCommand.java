@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class TimedDrivebaseCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private DrivebaseSubsystem m_subsystem;
-  private double desiredSpeed;
+  private double desiredPower;
   private double m_Time;
   private double duration;
 
@@ -22,9 +22,9 @@ public class TimedDrivebaseCommand extends CommandBase {
    * @param subsystem The subsystem used by this command.
    */
   
-  public TimedDrivebaseCommand(DrivebaseSubsystem subsystem, double desiredSpeed, double duration) {
+  public TimedDrivebaseCommand(DrivebaseSubsystem subsystem, double desiredPower, double duration) {
     m_subsystem = subsystem;
-    this.desiredSpeed = desiredSpeed;
+    this.desiredPower = desiredPower;
     this.duration = duration;
 
     m_Time = Timer.getFPGATimestamp();
@@ -45,7 +45,7 @@ public class TimedDrivebaseCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute(){
-    m_subsystem.drive(desiredSpeed, 0, 0);
+    m_subsystem.drive(desiredPower, 0, 0);
   }
 
   // Called once the command ends or is interrupted.

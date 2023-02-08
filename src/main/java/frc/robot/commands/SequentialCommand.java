@@ -27,8 +27,7 @@ public class SequentialCommand extends SequentialCommandGroup {
     m_ArmSubsystem = armSubsystem;
     
     addCommands(new TimedDrivebaseCommand(m_DrivebaseSubsystem, 0.1, 0.5), new ToggleMotorInvert(m_DrivebaseSubsystem), 
-    new TimedDrivebaseCommand(m_DrivebaseSubsystem, 0.25, 0.25), new WaitCommand(0.5),
-    new ToggleMotorInvert(m_DrivebaseSubsystem), parallel(new TimedDrivebaseCommand(m_DrivebaseSubsystem, -0.1, 0.5), 
-    new ArmCommand(m_ArmSubsystem, 90, 0.5)));
+    new TimedDrivebaseCommand(m_DrivebaseSubsystem, 0.25, 0.25), new WaitCommand(0.5), new ToggleMotorInvert(m_DrivebaseSubsystem), 
+    parallel(new TimedDrivebaseCommand(m_DrivebaseSubsystem, -0.1, 0.5), new ArmCommand(m_ArmSubsystem, 90, 0.5)));
   }
 }
