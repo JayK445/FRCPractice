@@ -26,18 +26,16 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final CommandXboxController controller_1 = new CommandXboxController(1);
+
+  private final CommandXboxController controller_1 = new CommandXboxController(0);
   private final DrivebaseSubsystem m_drivebaseSubsystem = new DrivebaseSubsystem();
   private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
-  private final DrivebaseCommand m_drivebaseCommand = new DrivebaseCommand(m_drivebaseSubsystem, controller_1::getLeftY, controller_1::getLeftX, controller_1::getRightY);
-  private final ArmCommand m_armCommand = new ArmCommand(m_armSubsystem, 90, 0.5);
-  private final InvertMotors m_motorInvert = new InvertMotors(m_drivebaseSubsystem);
-  private final SequentialCommand m_sequentialCommand = new SequentialCommand(m_drivebaseSubsystem, m_armSubsystem);
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-    m_drivebaseSubsystem.setDefaultCommand(m_drivebaseCommand);
+    m_drivebaseSubsystem.setDefaultCommand(new DrivebaseCommand(m_drivebaseSubsystem, controller_1::getLeftY, controller_1::getLeftX, controller_1::getRightY));
   }
 
   /**
@@ -49,11 +47,11 @@ public class RobotContainer {
    */
 
   private void configureButtonBindings() {
-    controller_1.x().onTrue(m_motorInvert);
-    controller_1.y().onTrue(new UninvertMotors(m_drivebaseSubsystem)); 
-    controller_1.a().onTrue(m_armCommand);
+    controller_1.x().onTrue(new InvertMotors(m_drivebaseSubsystem));
+    controller_1.y().toggleOnTrue(new UninvertMotors(m_drivebaseSubsystem)); 
+    controller_1.a().onTrue(new ArmCommand(m_armSubsystem, 90, 0.5));
     controller_1.b().onTrue(new ToggleMotorInvert(m_drivebaseSubsystem));
-    controller_1.rightBumper().onTrue((m_sequentialCommand));
+    controller_1.rightBumper().onTrue((new SequentialCommand(m_drivebaseSubsystem, m_armSubsystem)));
   }
 
   /**

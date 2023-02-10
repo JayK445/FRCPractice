@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class ArmCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private ArmSubsystem m_subsystem;
-  private double Target;
+  private double target;
   private double m_Time;
   private double duration;
     
@@ -24,7 +24,7 @@ public class ArmCommand extends CommandBase {
   public ArmCommand(ArmSubsystem subsystem, double target, double duration) {
     m_Time = Timer.getFPGATimestamp();
     m_subsystem = subsystem;
-    Target = target;
+    this.target = target;
     this.duration = duration;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
@@ -32,13 +32,13 @@ public class ArmCommand extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_subsystem.setDesiredAngle(target);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute(){
-    m_subsystem.setDesiredAngle(Target);
-  }  
+  public void execute(){}  
 
   // Called once the command ends or is interrupted.
   @Override
@@ -48,6 +48,6 @@ public class ArmCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Timer.getFPGATimestamp() >= m_Time +  duration;
+    return Timer.getFPGATimestamp() >= m_Time + duration;
   }
 }

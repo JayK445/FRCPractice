@@ -5,9 +5,7 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.DrivebaseSubsystem;
-
 import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -19,7 +17,6 @@ public class DrivebaseCommand extends CommandBase {
   private DoubleSupplier ySpeed;
   private DoubleSupplier xSpeed;
   private DoubleSupplier zRotation;
-
   private ShuffleboardTab tab = Shuffleboard.getTab("Drivebase");
 
   /**
@@ -46,6 +43,11 @@ public class DrivebaseCommand extends CommandBase {
   public void InvertMotors(Boolean isPressed){
     if (isPressed){
       m_subsystem.InvertMotors();
+    }
+  }
+  public void UninvertMotors(Boolean isPressed){
+    if (isPressed){
+      m_subsystem.UninvertMotors();
     }
   }
   // Called when the command is initially scheduled.

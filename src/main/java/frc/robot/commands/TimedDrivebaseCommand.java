@@ -33,11 +33,6 @@ public class TimedDrivebaseCommand extends CommandBase {
     addRequirements(m_subsystem);
   }
 
-  public void InvertMotors(Boolean isPressed){
-    if (isPressed){
-      m_subsystem.InvertMotors();
-    }
-  }
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
@@ -55,6 +50,9 @@ public class TimedDrivebaseCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Timer.getFPGATimestamp() >= m_Time +  duration;
+    if (Timer.getFPGATimestamp() >= (m_Time + duration)){
+      return true;
+    }
+    return false;
   }
 }
