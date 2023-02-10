@@ -13,8 +13,9 @@ public class TimedDrivebaseCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private DrivebaseSubsystem m_subsystem;
   private double desiredPower;
-  private double m_Time;
+  //private double m_Time;
   private double duration;
+  private Timer m_Timer;
 
   /**
    * Creates a new ExampleCommand.
@@ -26,8 +27,8 @@ public class TimedDrivebaseCommand extends CommandBase {
     m_subsystem = subsystem;
     this.desiredPower = desiredPower;
     this.duration = duration;
-
-    m_Time = Timer.getFPGATimestamp();
+    m_Timer = new Timer();
+    //m_Time = Timer.getFPGATimestamp();
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_subsystem);
@@ -50,9 +51,6 @@ public class TimedDrivebaseCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Timer.getFPGATimestamp() >= (m_Time + duration)){
-      return true;
-    }
-    return false;
+    return m_Timer.get() >= duration;
   }
 }

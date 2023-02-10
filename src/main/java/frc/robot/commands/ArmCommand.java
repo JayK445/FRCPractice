@@ -13,8 +13,9 @@ public class ArmCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private ArmSubsystem m_subsystem;
   private double target;
-  private double m_Time;
+  //private double m_Time;
   private double duration;
+  private Timer m_Timer;
     
   /**
    * Creates a new ExampleCommand.
@@ -22,10 +23,11 @@ public class ArmCommand extends CommandBase {
    */
 
   public ArmCommand(ArmSubsystem subsystem, double target, double duration) {
-    m_Time = Timer.getFPGATimestamp();
+    //m_Time = Timer.getFPGATimestamp();
     m_subsystem = subsystem;
     this.target = target;
     this.duration = duration;
+    m_Timer = new Timer();
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -34,11 +36,13 @@ public class ArmCommand extends CommandBase {
   @Override
   public void initialize() {
     m_subsystem.setDesiredAngle(target);
+    m_Timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute(){}  
+  public void execute(){
+  }  
 
   // Called once the command ends or is interrupted.
   @Override
@@ -48,6 +52,7 @@ public class ArmCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Timer.getFPGATimestamp() >= m_Time + duration;
+    return m_Timer.get() >= duration;
+    //return Timer.getFPGATimestamp() >= m_Time + duration;
   }
 }
