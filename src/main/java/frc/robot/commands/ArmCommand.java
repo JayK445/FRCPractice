@@ -13,9 +13,10 @@ public class ArmCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private ArmSubsystem m_subsystem;
   private double target;
-  //private double m_Time;
   private double duration;
   private Timer m_Timer;
+  //private double m_Time;
+
     
   /**
    * Creates a new ExampleCommand.
