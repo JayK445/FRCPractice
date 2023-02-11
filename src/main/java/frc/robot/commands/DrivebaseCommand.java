@@ -35,6 +35,7 @@ public class DrivebaseCommand extends CommandBase {
     tab.addNumber("ySpeed", this.ySpeed);
     tab.addNumber("xSpeed", this.xSpeed);
     tab.addNumber("zRotation", this.zRotation);
+    tab.add("Gyro", m_subsystem.getGyro());
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_subsystem);

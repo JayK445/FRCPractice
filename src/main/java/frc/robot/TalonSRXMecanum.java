@@ -20,7 +20,6 @@ import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.drive.RobotDriveBase;
-import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 
 /**
  * A class for driving Mecanum drive platforms.
@@ -65,9 +64,6 @@ public class TalonSRXMecanum extends RobotDriveBase implements Sendable, AutoClo
   private final TalonSRX m_rearLeftMotor;
   private final TalonSRX m_frontRightMotor;
   private final TalonSRX m_rearRightMotor;
-  private double ySpeed;
-  private double xSpeed;
-  private double zRotation;
 
   private boolean m_reported;
 
@@ -151,9 +147,6 @@ public class TalonSRXMecanum extends RobotDriveBase implements Sendable, AutoClo
    *     positive.
    */
   public void driveCartesian(double xSpeed, double ySpeed, double zRotation) {
-    this.xSpeed = xSpeed;
-    this.ySpeed = ySpeed;
-    this.zRotation = zRotation;
     driveCartesian(xSpeed, ySpeed, zRotation, new Rotation2d());
   }
 

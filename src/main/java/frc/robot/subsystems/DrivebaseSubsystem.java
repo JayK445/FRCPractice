@@ -4,18 +4,18 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-
-import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.TalonSRXMecanum;
 
 public class DrivebaseSubsystem extends SubsystemBase {
   private TalonSRXMecanum mecanumDrive;
   private TalonSRX m_frontLeft, m_frontRight, m_backLeft, m_backRight;
+  private WPI_PigeonIMU gyro;
 
   public DrivebaseSubsystem() {
+    gyro = new WPI_PigeonIMU(m_frontLeft);
     // construct motors
     m_frontLeft = new TalonSRX(3);
     m_frontRight = new TalonSRX(1);
@@ -25,7 +25,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
   }
 
   public void drive (double ySpeed, double xSpeed, double zRotation){
-    mecanumDrive.driveCartesian(xSpeed, ySpeed, zRotation);
+    mecanumDrive.driveCartesian(xSpeed, ySpeed, zRotation, gyro.getRotation2d());
     /*m_frontLeft.set(ControlMode.PercentOutput, ySpeed);
     m_frontRight.set(ControlMode.PercentOutput, ySpeed);
     m_backLeft.set(ControlMode.PercentOutput, ySpeed);
@@ -45,6 +45,9 @@ public class DrivebaseSubsystem extends SubsystemBase {
   public void ToggleInvert(){
     m_frontRight.setInverted(m_frontRight.getInverted());
     m_backRight.setInverted(m_backRight.getInverted());
+  }
+  public WPI_PigeonIMU getGyro(){
+    return gyro;
   }
 
   @Override
