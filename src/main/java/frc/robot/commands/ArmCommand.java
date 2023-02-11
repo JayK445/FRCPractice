@@ -36,7 +36,7 @@ public class ArmCommand extends CommandBase {
   @Override
   public void initialize() {
     m_subsystem.setDesiredAngle(target);
-    m_Timer.start();
+    m_Timer.restart();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

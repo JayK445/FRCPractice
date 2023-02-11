@@ -37,7 +37,7 @@ public class TimedDrivebaseCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_Timer.start();
+    m_Timer.restart();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
