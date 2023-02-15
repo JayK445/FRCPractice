@@ -5,6 +5,10 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.DrivebaseSubsystem;
+
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -16,12 +20,13 @@ public class TimedDrivebaseCommand extends CommandBase {
   private double duration;
   private Timer m_Timer;
   private double xSpeed, ySpeed, zRotation;
+  private PathPlannerTrajectory path;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
-   */
+   */ 
   
   public TimedDrivebaseCommand(DrivebaseSubsystem subsystem, double xSpeed, double ySpeed, double zRotation, double duration) {
     m_subsystem = subsystem;
@@ -31,8 +36,8 @@ public class TimedDrivebaseCommand extends CommandBase {
     this.zRotation = zRotation;
 
     m_Timer = new Timer();
+    path = PathPlanner.loadPath("New Path", null);
     //m_Time = Timer.getFPGATimestamp();
-
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_subsystem);
   }
