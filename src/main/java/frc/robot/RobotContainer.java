@@ -8,10 +8,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.DrivebaseCommand;
-import frc.robot.commands.InvertMotors;
 import frc.robot.commands.SequentialCommand;
-import frc.robot.commands.ToggleMotorInvert;
-import frc.robot.commands.UninvertMotors;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivebaseSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -47,10 +44,7 @@ public class RobotContainer {
    */
 
   private void configureButtonBindings() {
-    controller_1.x().onTrue(new InvertMotors(m_drivebaseSubsystem));
-    controller_1.y().toggleOnTrue(new UninvertMotors(m_drivebaseSubsystem)); 
     controller_1.a().onTrue(new ArmCommand(m_armSubsystem, 90, 0.5));
-    controller_1.b().onTrue(new ToggleMotorInvert(m_drivebaseSubsystem));
     controller_1.rightBumper().onTrue((new SequentialCommand(m_drivebaseSubsystem, m_armSubsystem)));
   }
 

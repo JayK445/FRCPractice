@@ -16,7 +16,7 @@ public class ArmSubsystem extends SubsystemBase{
 
     public ArmSubsystem(){
         armMotor = new TalonFX(13);
-        m_PIDController = new PIDController(0.000395, 0, 0);
+        m_PIDController = new PIDController(0.0004, 0, 0);
         armShuffleboard.add("PID", m_PIDController);
         armShuffleboard.addNumber("Arm Angle", armMotor::getSelectedSensorPosition);
         armShuffleboard.add("Target Angle", desiredAngle);

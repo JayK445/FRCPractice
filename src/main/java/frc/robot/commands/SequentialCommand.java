@@ -26,9 +26,9 @@ public class SequentialCommand extends SequentialCommandGroup {
   public SequentialCommand(DrivebaseSubsystem drivebaseSubsystem, ArmSubsystem armSubsystem) {
     m_DrivebaseSubsystem = drivebaseSubsystem;
     m_ArmSubsystem = armSubsystem;
-    addCommands(new TimedDrivebaseCommand(m_DrivebaseSubsystem, 0.1, 0, 0, 0.75).withTimeout(0.5), new WaitCommand(0.5), 
-    new UninvertMotors(m_DrivebaseSubsystem), new WaitCommand(0.5), new TimedDrivebaseCommand(m_DrivebaseSubsystem, 0.15, 0.1, 0, 0.25), 
-    new WaitCommand(0.5), new InvertMotors(m_DrivebaseSubsystem), new WaitCommand(0.5), 
+    addCommands(new TimedDrivebaseCommand(m_DrivebaseSubsystem, 0.3, 0, 0, 1.5).withTimeout(0.5), new WaitCommand(0.5), 
+    new WaitCommand(0.5), new TimedDrivebaseCommand(m_DrivebaseSubsystem, 0.25, 0.3, 0.15, 3), 
+    new WaitCommand(0.5), new WaitCommand(0.5), 
     Commands.parallel(new TimedDrivebaseCommand(m_DrivebaseSubsystem, -0.1, -0.1, 0, 0.5), new ArmCommand(m_ArmSubsystem, 90, 0.5))
     );
   }

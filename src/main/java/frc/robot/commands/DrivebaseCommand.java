@@ -41,16 +41,6 @@ public class DrivebaseCommand extends CommandBase {
     addRequirements(m_subsystem);
   }
 
-  public void InvertMotors(Boolean isPressed){
-    if (isPressed){
-      m_subsystem.InvertMotors();
-    }
-  }
-  public void UninvertMotors(Boolean isPressed){
-    if (isPressed){
-      m_subsystem.UninvertMotors();
-    }
-  }
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
