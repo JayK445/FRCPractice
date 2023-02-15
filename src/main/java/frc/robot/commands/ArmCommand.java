@@ -15,8 +15,6 @@ public class ArmCommand extends CommandBase {
   private double target;
   private double duration;
   private Timer m_Timer;
-  //private double m_Time;
-
     
   /**
    * Creates a new ExampleCommand.
@@ -24,7 +22,6 @@ public class ArmCommand extends CommandBase {
    */
 
   public ArmCommand(ArmSubsystem subsystem, double target, double duration) {
-    //m_Time = Timer.getFPGATimestamp();
     m_subsystem = subsystem;
     this.target = target;
     this.duration = duration;
@@ -54,6 +51,5 @@ public class ArmCommand extends CommandBase {
   @Override
   public boolean isFinished() {
     return m_Timer.get() >= duration;
-    //return Timer.getFPGATimestamp() >= m_Time + duration;
   }
 }

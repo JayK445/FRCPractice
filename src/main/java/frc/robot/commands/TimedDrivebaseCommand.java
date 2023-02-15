@@ -37,8 +37,6 @@ public class TimedDrivebaseCommand extends CommandBase {
 
     m_Timer = new Timer();
     path = PathPlanner.loadPath("New Path", null);
-    //m_Time = Timer.getFPGATimestamp();
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_subsystem);
   }
 
