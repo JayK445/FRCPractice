@@ -27,7 +27,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
   }
 
   public void drive (double ySpeed, double xSpeed, double zRotation){
-    drivebase.driveCartesian(xSpeed, ySpeed, zRotation , gyro.getRotation2d());
+    drivebase.driveCartesian(ySpeed, xSpeed, zRotation , gyro.getRotation2d());
   }
 
   public WPI_PigeonIMU getGyro(){
