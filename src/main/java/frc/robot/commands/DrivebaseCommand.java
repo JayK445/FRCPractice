@@ -5,12 +5,10 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.DrivebaseSubsystem;
-
 import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj2.command.CommandBase; 
+import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
 public class DrivebaseCommand extends CommandBase {
@@ -37,19 +35,17 @@ public class DrivebaseCommand extends CommandBase {
     tab.addNumber("ySpeed", this.ySpeed);
     tab.addNumber("xSpeed", this.xSpeed);
     tab.addNumber("zRotation", this.zRotation);
+    tab.add("Gyro", m_subsystem.getGyro());
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_subsystem);
   }
 
-  public void InvertMotors(Boolean isPressed){
-    if (isPressed){
-      m_subsystem.InvertMotors();
-    }
-  }
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override

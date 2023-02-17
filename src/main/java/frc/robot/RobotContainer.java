@@ -8,13 +8,11 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.DrivebaseCommand;
-import frc.robot.commands.InvertMotors;
-import frc.robot.commands.ToggleMotorInvert;
-import frc.robot.commands.UninvertMotors;
+import frc.robot.commands.SequentialCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivebaseSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.Button;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -26,16 +24,15 @@ import edu.wpi.first.wpilibj2.command.button.Button;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
-  private final XboxController controller_1 = new XboxController(0);
+  private final CommandXboxController controller_1 = new CommandXboxController(0);
   private final DrivebaseSubsystem m_drivebaseSubsystem = new DrivebaseSubsystem();
   private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
-  private final DrivebaseCommand m_drivebaseCommand = new DrivebaseCommand(m_drivebaseSubsystem, controller_1::getLeftY, controller_1::getLeftX, controller_1::getRightY);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-    m_drivebaseSubsystem.setDefaultCommand(m_drivebaseCommand);
+    m_drivebaseSubsystem.setDefaultCommand(new DrivebaseCommand(m_drivebaseSubsystem, controller_1::getLeftY, controller_1::getLeftX, controller_1::getRightY));
   }
 
   /**
@@ -47,10 +44,8 @@ public class RobotContainer {
    */
 
   private void configureButtonBindings() {
-    new Button(controller_1::getXButton).whenPressed(new InvertMotors(m_drivebaseSubsystem));
-    new Button(controller_1::getYButton).whenPressed(new UninvertMotors(m_drivebaseSubsystem));
-    new Button(controller_1::getAButton).whenPressed(new ToggleMotorInvert(m_drivebaseSubsystem));
-    new Button(controller_1::getBButton).whenPressed(new ArmCommand(m_armSubsystem, 90));
+    controller_1.a().onTrue(new ArmCommand(m_armSubsystem, 90, 0.5));
+    controller_1.rightBumper().onTrue((new SequentialCommand(m_drivebaseSubsystem, m_armSubsystem)));
   }
 
   /**
