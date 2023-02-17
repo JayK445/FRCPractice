@@ -36,7 +36,7 @@ public class TimedDrivebaseCommand extends CommandBase {
     this.zRotation = zRotation;
 
     m_Timer = new Timer();
-    path = PathPlanner.loadPath("New Path", null);
+    path = PathPlanner.loadPath("New Path", 1, 1);
     addRequirements(m_subsystem);
   }
 
