@@ -9,6 +9,11 @@ import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
+import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
+import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,6 +23,9 @@ public class DrivebaseSubsystem extends SubsystemBase {
   private MecanumDrive drivebase;  
   private WPI_PigeonIMU gyro;
   private WPI_TalonSRX frontLeft, frontRight, backLeft, backRight;
+  private MecanumDriveOdometry mecanumDriveOdometry;
+  private MecanumDriveKinematics kinematics;
+  private Pose2d pose2d = new Pose2d();
   private final AdvancedSwerveTrajectoryFollower follower =
       new AdvancedSwerveTrajectoryFollower(
           new PIDController(0.4, 0.0, 0.025),
@@ -37,7 +45,9 @@ public class DrivebaseSubsystem extends SubsystemBase {
     gyro = new WPI_PigeonIMU(frontLeft);
 
     drivebase = new MecanumDrive(frontLeft, backRight, frontRight, backLeft);
-    
+    kinematics = new MecanumDriveKinematics(new Translation2d(), new Translation2d(), new Translation2d(), new Translation2d());
+    mecanumDriveOdometry = new MecanumDriveOdometry(kinematics, gyro.getRotation2d(), 
+    new MecanumDriveWheelPositions(frontLeft.get(), frontRight.get(), backLeft.get(), backRight.get()));
   }
 
   public void drive (double ySpeed, double xSpeed, double zRotation){
@@ -46,6 +56,15 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   public WPI_PigeonIMU getGyro(){
     return gyro;
+  }
+
+  public AdvancedSwerveTrajectoryFollower getFollower(){
+    return follower;
+  }
+  public void resetOdometryToPose(Pose2d pose){
+    gyro.reset();
+    mecanumDriveOdometry.resetPosition(gyro.getRotation2d(), new MecanumDriveWheelPositions(), pose);
+
   }
 
   @Override
