@@ -6,13 +6,27 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.util.AdvancedSwerveTrajectoryFollower;
 
 public class DrivebaseSubsystem extends SubsystemBase {
   private MecanumDrive drivebase;  
   private WPI_PigeonIMU gyro;
   private WPI_TalonSRX frontLeft, frontRight, backLeft, backRight;
+  private final AdvancedSwerveTrajectoryFollower follower =
+      new AdvancedSwerveTrajectoryFollower(
+          new PIDController(0.4, 0.0, 0.025),
+          new PIDController(0.4, 0.0, 0.025),
+          new ProfiledPIDController(
+              .147,
+              0,
+              0,
+              new TrapezoidProfile.Constraints(1, 1)));
 
   public DrivebaseSubsystem() {
     // construct motors
@@ -27,7 +41,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
   }
 
   public void drive (double ySpeed, double xSpeed, double zRotation){
-    drivebase.driveCartesian(ySpeed, xSpeed, zRotation , gyro.getRotation2d());
+    drivebase.driveCartesian(xSpeed, ySpeed, zRotation , gyro.getRotation2d());
   }
 
   public WPI_PigeonIMU getGyro(){
