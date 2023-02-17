@@ -15,6 +15,7 @@ import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.util.AdvancedSwerveTrajectoryFollower;
@@ -23,6 +24,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
   private MecanumDrive drivebase;  
   private WPI_PigeonIMU gyro;
   private WPI_TalonSRX frontLeft, frontRight, backLeft, backRight;
+  private Encoder encoderfl, encoderfr, encoderbl, encoderbr;
   private MecanumDriveOdometry mecanumDriveOdometry;
   private MecanumDriveKinematics kinematics;
   private Pose2d pose2d = new Pose2d();
@@ -42,12 +44,16 @@ public class DrivebaseSubsystem extends SubsystemBase {
     frontRight = new WPI_TalonSRX(1);
     backLeft = new WPI_TalonSRX(6);
     backRight = new WPI_TalonSRX(7);
+    encoderfl = new Encoder(0, 3);
+    encoderbl = new Encoder(0, 6);
+    encoderfr = new Encoder(0, 1);
+    encoderbr = new Encoder(0, 7);
     gyro = new WPI_PigeonIMU(frontLeft);
 
     drivebase = new MecanumDrive(frontLeft, backRight, frontRight, backLeft);
     kinematics = new MecanumDriveKinematics(new Translation2d(), new Translation2d(), new Translation2d(), new Translation2d());
     mecanumDriveOdometry = new MecanumDriveOdometry(kinematics, gyro.getRotation2d(), 
-    new MecanumDriveWheelPositions(frontLeft.get(), frontRight.get(), backLeft.get(), backRight.get()));
+    new MecanumDriveWheelPositions(encoderfl.getDistance(), encoderfr.getDistance(), encoderbl.getDistance(), encoderbr.getDistance()));
   }
 
   public void drive (double ySpeed, double xSpeed, double zRotation){
