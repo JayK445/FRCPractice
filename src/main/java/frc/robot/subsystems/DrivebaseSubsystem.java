@@ -15,7 +15,9 @@ import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.counter.Tachometer;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.util.AdvancedSwerveTrajectoryFollower;
@@ -27,7 +29,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
   private Encoder encoderfl, encoderfr, encoderbl, encoderbr;
   private MecanumDriveOdometry mecanumDriveOdometry;
   private MecanumDriveKinematics kinematics;
-  private Pose2d pose2d = new Pose2d();
+  private Tachometer tachometer;
+  private DigitalInput digitalInput;
   private final AdvancedSwerveTrajectoryFollower follower =
       new AdvancedSwerveTrajectoryFollower(
           new PIDController(0.4, 0.0, 0.025),
@@ -44,20 +47,27 @@ public class DrivebaseSubsystem extends SubsystemBase {
     frontRight = new WPI_TalonSRX(1);
     backLeft = new WPI_TalonSRX(6);
     backRight = new WPI_TalonSRX(7);
-    encoderfl = new Encoder(0, 3);
-    encoderbl = new Encoder(0, 6);
-    encoderfr = new Encoder(0, 1);
-    encoderbr = new Encoder(0, 7);
-    gyro = new WPI_PigeonIMU(frontLeft);
 
+    /*
+    These encoders will not work, as the channels are not plugged in
+    The Tachometer may be of use, but has no guarantee that it is even working, and has no function that gets the distance that the motor 
+    has traveled
+    */
+    encoderfl = new Encoder(0, 1);
+    encoderbl = new Encoder(2, 3);
+    encoderfr = new Encoder(4, 5);
+    encoderbr = new Encoder(6, 7);
+    digitalInput = new DigitalInput(0);
+    tachometer = new Tachometer(digitalInput);
+    gyro = new WPI_PigeonIMU(frontLeft);
     drivebase = new MecanumDrive(frontLeft, backRight, frontRight, backLeft);
     kinematics = new MecanumDriveKinematics(new Translation2d(), new Translation2d(), new Translation2d(), new Translation2d());
-    mecanumDriveOdometry = new MecanumDriveOdometry(kinematics, gyro.getRotation2d(), 
+    mecanumDriveOdometry = new MecanumDriveOdometry(kinematics, gyro.getRotation2d(), /*The robot's encoders and kinematics must be adjusted*/
     new MecanumDriveWheelPositions(encoderfl.getDistance(), encoderfr.getDistance(), encoderbl.getDistance(), encoderbr.getDistance()));
   }
 
   public void drive (double ySpeed, double xSpeed, double zRotation){
-    drivebase.driveCartesian(xSpeed, ySpeed, zRotation , gyro.getRotation2d());
+    drivebase.driveCartesian(xSpeed, ySpeed, zRotation, gyro.getRotation2d());
   }
 
   public WPI_PigeonIMU getGyro(){

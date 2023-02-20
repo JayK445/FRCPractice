@@ -4,10 +4,13 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.PathPlanner;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.DrivebaseCommand;
+import frc.robot.commands.FollowTrajectoryCommand;
 import frc.robot.commands.SequentialCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivebaseSubsystem;
@@ -32,7 +35,8 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-    m_drivebaseSubsystem.setDefaultCommand(new DrivebaseCommand(m_drivebaseSubsystem, controller_1::getLeftY, controller_1::getLeftX, controller_1::getRightY));
+    m_drivebaseSubsystem.setDefaultCommand(new DrivebaseCommand(
+      m_drivebaseSubsystem, controller_1::getLeftY, controller_1::getLeftX, controller_1::getRightX));
   }
 
   /**
@@ -44,6 +48,7 @@ public class RobotContainer {
    */
 
   private void configureButtonBindings() {
+    controller_1.x().onTrue(new FollowTrajectoryCommand(PathPlanner.loadPath("New Path", 1, 1), m_drivebaseSubsystem));
     controller_1.a().onTrue(new ArmCommand(m_armSubsystem, 90, 0.5));
     controller_1.rightBumper().onTrue((new SequentialCommand(m_drivebaseSubsystem, m_armSubsystem)));
   }
