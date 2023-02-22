@@ -15,9 +15,9 @@ import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.DigitalInput;
+//import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.counter.Tachometer;
+//import edu.wpi.first.wpilibj.counter.Tachometer;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.util.AdvancedSwerveTrajectoryFollower;
@@ -29,8 +29,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
   private Encoder encoderfl, encoderfr, encoderbl, encoderbr;
   private MecanumDriveOdometry mecanumDriveOdometry;
   private MecanumDriveKinematics kinematics;
-  private Tachometer tachometer;
-  private DigitalInput digitalInput;
+  //private Tachometer tachometer;
+  //private DigitalInput digitalInput;
   private final AdvancedSwerveTrajectoryFollower follower =
       new AdvancedSwerveTrajectoryFollower(
           new PIDController(0.4, 0.0, 0.025),
@@ -57,8 +57,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
     encoderbl = new Encoder(2, 3);
     encoderfr = new Encoder(4, 5);
     encoderbr = new Encoder(6, 7);
-    digitalInput = new DigitalInput(0);
-    tachometer = new Tachometer(digitalInput);
+    //digitalInput = new DigitalInput(0);
+    //tachometer = new Tachometer(digitalInput);
     gyro = new WPI_PigeonIMU(frontLeft);
     drivebase = new MecanumDrive(frontLeft, backRight, frontRight, backLeft);
     kinematics = new MecanumDriveKinematics(new Translation2d(), new Translation2d(), new Translation2d(), new Translation2d());
