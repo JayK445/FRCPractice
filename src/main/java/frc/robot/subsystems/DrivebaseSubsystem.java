@@ -60,7 +60,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
     //digitalInput = new DigitalInput(0);
     //tachometer = new Tachometer(digitalInput);
     gyro = new WPI_PigeonIMU(frontLeft);
-    drivebase = new MecanumDrive(frontLeft, backRight, frontRight, backLeft);
+    drivebase = new MecanumDrive(frontLeft, backLeft, frontRight, backRight);
     kinematics = new MecanumDriveKinematics(new Translation2d(), new Translation2d(), new Translation2d(), new Translation2d());
     mecanumDriveOdometry = new MecanumDriveOdometry(kinematics, gyro.getRotation2d(), /*The robot's encoders and kinematics must be adjusted*/
     new MecanumDriveWheelPositions(encoderfl.getDistance(), encoderfr.getDistance(), encoderbl.getDistance(), encoderbr.getDistance()));
