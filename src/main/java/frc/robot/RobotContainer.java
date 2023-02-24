@@ -17,6 +17,7 @@ import frc.robot.commands.FollowTrajectoryCommand;
 import frc.robot.commands.SequentialCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivebaseSubsystem;
+import frc.robot.subsystems.ArmSubsystem.Modes;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -55,7 +56,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
     controller_1.x().onTrue(new FollowTrajectoryCommand(PathPlanner.loadPath("New Path", 1, 1), m_drivebaseSubsystem));
     controller_1.y().onTrue(autoSelector.getSelected());
-    controller_1.a().onTrue(new ArmCommand(m_armSubsystem, 90, 0.5));
+    controller_1.a().onTrue(new ArmCommand(m_armSubsystem, 90, 0.5, Modes.ON));
+    controller_1.b().onTrue(new ArmCommand(m_armSubsystem, 0, 0, Modes.HOLD_POSITION));
     controller_1.rightBumper().onTrue((new SequentialCommand(m_drivebaseSubsystem, m_armSubsystem, autoSelector.getSelected())));
   }
 
