@@ -7,6 +7,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.Ports;
 
 public class ArmSubsystem extends SubsystemBase{
     private PIDController m_PIDController;
@@ -17,7 +18,7 @@ public class ArmSubsystem extends SubsystemBase{
     public enum Modes{ON, HOLD_POSITION}
 
     public ArmSubsystem(){
-        armMotor = new TalonFX(13);
+        armMotor = new TalonFX(Ports.ARM_MOTOR_PORT);
         m_PIDController = new PIDController(0.0004, 0, 0);
         armShuffleboard.add("PID", m_PIDController);
         armShuffleboard.addNumber("Arm Angle", armMotor::getSelectedSensorPosition);
