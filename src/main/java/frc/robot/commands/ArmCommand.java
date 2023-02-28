@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ArmSubsystem.Modes;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -15,16 +16,17 @@ public class ArmCommand extends CommandBase {
   private double target;
   private double duration;
   private Timer m_Timer;
-    
+  private Modes mode;
   /**
    * Creates a new ExampleCommand.
    * @param subsystem The subsystem used by this command.
    */
 
-  public ArmCommand(ArmSubsystem subsystem, double target, double duration) {
+  public ArmCommand(ArmSubsystem subsystem, double target, double duration, Modes mode) {
     m_subsystem = subsystem;
     this.target = target;
     this.duration = duration;
+    this.mode = mode;
     m_Timer = new Timer();
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
@@ -33,6 +35,7 @@ public class ArmCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_subsystem.setMode(mode);
     m_subsystem.setDesiredAngle(target);
     m_Timer.restart();
   }
