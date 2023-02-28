@@ -9,7 +9,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DrivebaseCommand;
 import frc.robot.subsystems.DrivebaseSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-
+import frc.robot.commands.ArmCommand;
+import frc.robot.subsystems.ArmSubsystem;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -23,7 +24,8 @@ public class RobotContainer {
 
   private final DrivebaseSubsystem m_drivebaseSubsystem = new DrivebaseSubsystem();
 
-  private final DrivebaseCommand m_autoCommand = new DrivebaseCommand(m_drivebaseSubsystem);
+
+  private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -37,7 +39,11 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+
+new Button (controller_1::getX).whenPressed(new ArmCommand(m_armSubsystem, 0);
+
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

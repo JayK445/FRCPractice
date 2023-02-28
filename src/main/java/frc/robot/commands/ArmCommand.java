@@ -4,23 +4,23 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.DrivebaseSubsystem;
+import frc.robot.subsystems.Subsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class DrivebaseCommand extends CommandBase {
+public class ArmCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final DrivebaseSubsystem m_subsystem;
-  private double xSpeed;
+  private final ArmSubsystem m_subsystem;
+  private double speed;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public DrivebaseCommand(DrivebaseSubsystem subsystem, double ySpeed) {
+  public ArmCommand(ArmSubsystem subsystem, double speed) {
     m_subsystem = subsystem;
-    this.ySpeed = ySpeed;
+    this.speed = speed;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_subsystem);
   }
@@ -32,7 +32,7 @@ public class DrivebaseCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.drive(ySpeed);
+    m_subsystem.moveArm (speed);
   }
 
   // Called once the command ends or is interrupted.

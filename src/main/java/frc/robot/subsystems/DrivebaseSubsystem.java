@@ -10,16 +10,19 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DrivebaseSubsystem extends SubsystemBase {
   
-  private MecanumDrive mecanumDrive;
-  private MotorController m_frontLeft, m_frontRight, m_backLeft, m_backRight;
-
+  private WPI_TalonSRX m_frontLeft, m_frontRight, m_backLeft, m_backRight;
+  private MecanumDrive drivebase;
   public DrivebaseSubsystem() {
-
-    mecanumDrive = new MecanumDrive(m_frontLeft, m_backLeft, m_frontRight, m_backRight);
-
+    m_frontLeft = new WPI_TalonSRX(3);
+    m_frontRight = new WPI_TalonSRX(1);
+    m_backLeft = new WPI_TalonSRX(6);
+    m_backRight = new WPI_TalonSRX(7);
+    drivebase = new MecanumDrive(m_frontLeft, m_backLeft, m_frontRight, m_backRight);
   }
 
-  
+  public void drive(double ySpeed) {
+   MecanumDrive.driveCartesian()
+  }
 
   @Override
   public void periodic() {
