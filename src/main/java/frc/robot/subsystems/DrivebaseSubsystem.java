@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.Ports;
 
 public class DrivebaseSubsystem extends SubsystemBase {
   private MecanumDrive drivebase;  
@@ -16,10 +17,10 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   public DrivebaseSubsystem() {
     // construct motors
-    frontLeft = new WPI_TalonSRX(3);
-    frontRight = new WPI_TalonSRX(1);
-    backLeft = new WPI_TalonSRX(6);
-    backRight = new WPI_TalonSRX(7);
+    frontLeft = new WPI_TalonSRX(Ports.FRONT_LEFT_MOTOR_PORT);
+    frontRight = new WPI_TalonSRX(Ports.FRONT_RIGHT_MOTOR_PORT);
+    backLeft = new WPI_TalonSRX(Ports.BACK_LEFT_MOTOR_PORT);
+    backRight = new WPI_TalonSRX(Ports.BACK_RIGHT_MOTOR_PORT);
     gyro = new WPI_PigeonIMU(frontLeft);
 
     drivebase = new MecanumDrive(frontLeft, backRight, frontRight, backLeft);
