@@ -30,6 +30,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
+    m_drivebaseSubsystem.setDefaultCommand(new DrivebaseCommand(m_drivebaseSubsystem, controller_1::getLeftY, controller_1::getLeftX, controller_1::getRightX))
     configureButtonBindings();
   }
 
@@ -41,9 +42,9 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-new Button (controller_1::getY).whenPressed(new DrivebaseCommand(m_drivebaseSubsystem), 0);
+new Button (controller_1::getY).whenPressed(new TimedDriveCommand(m_drivebaseSubsystem), .1, .1, .1);
 
-new Button (controller_1::getX).whenPressed(new ArmCommand(m_armSubsystem, 0);
+new Button (controller_1::getX).whenPressed(new ArmCommand(m_armSubsystem, .1);
 
   }
 

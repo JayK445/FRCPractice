@@ -11,16 +11,20 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class DrivebaseCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final DrivebaseSubsystem m_subsystem;
+  private double ySpeed;
   private double xSpeed;
+  private double zRotation;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public DrivebaseCommand(DrivebaseSubsystem subsystem, double ySpeed) {
+  public DrivebaseCommand(DrivebaseSubsystem subsystem, double ySpeed, double xSpeed, double zRotation) {
     m_subsystem = subsystem;
     this.ySpeed = ySpeed;
+    this.xSpeed = xSpeed;
+    this.zRotation = zRotation;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_subsystem);
   }
@@ -32,7 +36,7 @@ public class DrivebaseCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.drive(ySpeed);
+    m_subsystem.drive(ySpeed, xSpeed, zRotation);
   }
 
   // Called once the command ends or is interrupted.

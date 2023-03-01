@@ -20,8 +20,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
     drivebase = new MecanumDrive(m_frontLeft, m_backLeft, m_frontRight, m_backRight);
   }
 
-  public void drive(double ySpeed) {
-   MecanumDrive.driveCartesian()
+  public void drive(double ySpeed, double xSpeed, double zRotation) {
+   MecanumDrive.driveCartesian(ySpeed, xSpeed, zRotation);
   }
 
   @Override

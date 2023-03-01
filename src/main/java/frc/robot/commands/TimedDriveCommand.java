@@ -20,12 +20,11 @@ public class TimedDriveCommande extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public TimedDriveCommand(DrivebaseSubsystem subsystem, double ySpeed, double xSpeed, double zRotation, double time) {
+  public TimedDriveCommand(DrivebaseSubsystem subsystem, double ySpeed, double xSpeed, double zRotation) {
     m_subsystem = subsystem;
     this.xSpeed = xSpeed;
     this.ySpeed = ySpeed;
     this.zRotation = zRotation;
-    this.time = Time; 
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_subsystem);
