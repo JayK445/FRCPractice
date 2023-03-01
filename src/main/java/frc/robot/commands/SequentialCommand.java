@@ -28,7 +28,8 @@ public class SequentialCommand extends SequentialCommandGroup {
     m_ArmSubsystem = armSubsystem;
     addCommands(new TimedDrivebaseCommand(m_DrivebaseSubsystem, 0.3, 0, 0, 1.5), 
     new TimedDrivebaseCommand(m_DrivebaseSubsystem, 0.25, 0.3, 0.15, 3), Commands.parallel(
-    new TimedDrivebaseCommand(m_DrivebaseSubsystem, -0.1, -0.1, 0, 0.5), new ArmCommand(m_ArmSubsystem, 90, 0.5, Modes.ON))
+    new TimedDrivebaseCommand(m_DrivebaseSubsystem, -0.1, -0.1, 0, 0.5), new ArmCommand
+    (m_ArmSubsystem, 90, 0.5, Modes.PID))
     );
   }
 }

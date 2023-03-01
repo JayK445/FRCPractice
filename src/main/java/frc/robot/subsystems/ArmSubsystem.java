@@ -15,7 +15,7 @@ public class ArmSubsystem extends SubsystemBase{
     private double desiredAngle;
     private ShuffleboardTab armShuffleboard = Shuffleboard.getTab("Arm");
     private Modes mode;
-    public enum Modes{ON, HOLD_POSITION, OFF}
+    public enum Modes{PID, HOLD_POSITION, COAST}
 
     public ArmSubsystem(){
         armMotor = new TalonFX(Ports.ARM_MOTOR_PORT);
@@ -46,32 +46,32 @@ public class ArmSubsystem extends SubsystemBase{
         armMotor.setNeutralMode(NeutralMode.Brake);
     }
 
-    public void turnMotorOff(){
+    public void coastMotors(){
         armMotor.setNeutralMode(NeutralMode.Coast);
     }
 
     public Modes advanceMode(){
         switch(mode){
-            case ON:
-                return Modes.ON;
+            case PID:
+                return Modes.PID;
             case HOLD_POSITION:
                 return Modes.HOLD_POSITION;
-            case OFF:
-                return Modes.OFF;
+            case COAST:
+                return Modes.COAST;
         }
         return null;
     }
-    
+
     public void applyMode(Modes mode){
         switch(mode){
-            case ON:
+            case PID:
                 PIDPeriodic();
                 break;
             case HOLD_POSITION:
                 holdPosition();
                 break;
-            case OFF:
-                turnMotorOff();
+            case COAST:
+                coastMotors();
                 break;
         }
     }
