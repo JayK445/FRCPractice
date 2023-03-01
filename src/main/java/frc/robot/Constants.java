@@ -19,5 +19,6 @@ public final class Constants {
         public static final int BACK_LEFT_MOTOR_PORT = 6;
         public static final int BACK_RIGHT_MOTOR_PORT = 7;
         public static final int ARM_MOTOR_PORT = 13;
+        public static final int CONTROLLER_1_PORT = 0;
     }
 }

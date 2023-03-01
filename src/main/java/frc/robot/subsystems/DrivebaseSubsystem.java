@@ -23,12 +23,12 @@ public class DrivebaseSubsystem extends SubsystemBase {
     backRight = new WPI_TalonSRX(Ports.BACK_RIGHT_MOTOR_PORT);
     gyro = new WPI_PigeonIMU(frontLeft);
 
-    drivebase = new MecanumDrive(frontLeft, backRight, frontRight, backLeft);
+    drivebase = new MecanumDrive(frontLeft, backLeft, frontRight, backRight);
     
   }
 
-  public void drive (double ySpeed, double xSpeed, double zRotation){
-    drivebase.driveCartesian(ySpeed, xSpeed, zRotation , gyro.getRotation2d());
+  public void drive (double xSpeed, double ySpeed, double zRotation){
+    drivebase.driveCartesian(xSpeed, ySpeed, zRotation, gyro.getRotation2d());
   }
 
   public WPI_PigeonIMU getGyro(){
