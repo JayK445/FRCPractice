@@ -5,10 +5,14 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.DrivebaseSubsystem;
+
+import java.util.function.DoubleSupplier;
+
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class TimedDriveCommande extends CommandBase {
+public class TimedDriveCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final DrivebaseSubsystem m_subsystem;
   private double xSpeed;
@@ -20,7 +24,7 @@ public class TimedDriveCommande extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public TimedDriveCommand(DrivebaseSubsystem subsystem, double ySpeed, double xSpeed, double zRotation) {
+  public TimedDriveCommand(DrivebaseSubsystem subsystem, double ySpeed, double xSpeed, Double zRotation) {
     m_subsystem = subsystem;
     this.xSpeed = xSpeed;
     this.ySpeed = ySpeed;
@@ -36,7 +40,7 @@ public class TimedDriveCommande extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    time = Time.getFPGATimestamp();
+    time = Timer.getFPGATimestamp();
   
   }
 
@@ -53,6 +57,6 @@ public class TimedDriveCommande extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Time.getFPGATimestamp() - 5 >= time;
+    return Timer.getFPGATimestamp() - 5 >= time;
   }
 }

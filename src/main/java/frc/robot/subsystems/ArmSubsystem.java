@@ -6,6 +6,9 @@ package frc.robot.subsystems;
 
 
 
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ArmSubsystem extends SubsystemBase {
@@ -14,7 +17,7 @@ public class ArmSubsystem extends SubsystemBase {
   public ArmSubsystem() {
     motor = new TalonFX (13);
   }
-public void movearm(double speed){
+public void moveArm(double speed){
 
 motor.set(TalonFXControlMode.PercentOutput, speed);
 

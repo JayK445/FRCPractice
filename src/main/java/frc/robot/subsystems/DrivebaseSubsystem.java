@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,7 +23,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
   }
 
   public void drive(double ySpeed, double xSpeed, double zRotation) {
-   MecanumDrive.driveCartesian(ySpeed, xSpeed, zRotation);
+   drivebase.driveCartesian(ySpeed, xSpeed, zRotation);
   }
 
   @Override

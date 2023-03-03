@@ -5,6 +5,9 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.DrivebaseSubsystem;
+
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
@@ -20,11 +23,11 @@ public class DrivebaseCommand extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public DrivebaseCommand(DrivebaseSubsystem subsystem, double ySpeed, double xSpeed, double zRotation) {
+  public DrivebaseCommand(DrivebaseSubsystem subsystem, DoubleSupplier ySpeed, DoubleSupplier xSpeed, DoubleSupplier zRotation) {
     m_subsystem = subsystem;
-    this.ySpeed = ySpeed;
-    this.xSpeed = xSpeed;
-    this.zRotation = zRotation;
+    this.ySpeed = ySpeed.getAsDouble();
+    this.xSpeed = xSpeed.getAsDouble();
+    this.zRotation = zRotation.getAsDouble();
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_subsystem);
   }

@@ -7,8 +7,10 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DrivebaseCommand;
+import frc.robot.commands.TimedDriveCommand;
 import frc.robot.subsystems.DrivebaseSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.robot.commands.ArmCommand;
 import frc.robot.subsystems.ArmSubsystem;
 /**
@@ -30,7 +32,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
-    m_drivebaseSubsystem.setDefaultCommand(new DrivebaseCommand(m_drivebaseSubsystem, controller_1::getLeftY, controller_1::getLeftX, controller_1::getRightX))
+    m_drivebaseSubsystem.setDefaultCommand(new DrivebaseCommand(m_drivebaseSubsystem, controller_1::getLeftY, controller_1::getLeftX, controller_1::getRightX));
     configureButtonBindings();
   }
 
@@ -42,9 +44,9 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-new Button (controller_1::getY).whenPressed(new TimedDriveCommand(m_drivebaseSubsystem), .1, .1, .1);
+new Button ().whenPressed(new TimedDriveCommand(m_drivebaseSubsystem, .1, .1, .1));
 
-new Button (controller_1::getX).whenPressed(new ArmCommand(m_armSubsystem, .1);
+new Button ().whenPressed(new ArmCommand(m_armSubsystem, .1));
 
   }
 
@@ -55,6 +57,6 @@ new Button (controller_1::getX).whenPressed(new ArmCommand(m_armSubsystem, .1);
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    return null;
   }
 }
