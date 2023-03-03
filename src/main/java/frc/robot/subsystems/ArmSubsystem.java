@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -15,13 +16,20 @@ public class ArmSubsystem extends SubsystemBase{
     private double desiredAngle;
     private ShuffleboardTab armShuffleboard = Shuffleboard.getTab("Arm");
     private Modes mode;
-    public enum Modes{PID, HOLD_POSITION, COAST}
+    private LinearFilter lowPassFilter;
+    private LinearFilter highPassFilter;
+    public enum Modes{PID, MANUAL, HOLD_POSITION, COAST}
 
     public ArmSubsystem(){
         armMotor = new TalonFX(Ports.ARM_MOTOR_PORT);
         m_PIDController = new PIDController(0.0004, 0, 0);
+        lowPassFilter = LinearFilter.movingAverage(5);
+        highPassFilter = LinearFilter.highPass(0.1, 0.02);
         armShuffleboard.add("PID", m_PIDController);
         armShuffleboard.addNumber("Arm Angle", armMotor::getSelectedSensorPosition);
+        armShuffleboard.addNumber("Low Pass Filter", () -> lowPassFilter.calculate(0.02));
+        armShuffleboard.addNumber("High Pass Filter", () -> highPassFilter.calculate(0.02));
+        armShuffleboard.addNumber("Stator Current", armMotor::getStatorCurrent);
         armShuffleboard.add("Target Angle", desiredAngle);
     }
 
@@ -43,6 +51,7 @@ public class ArmSubsystem extends SubsystemBase{
     }
     
     public void holdPosition(){
+        armMotor.set(TalonFXControlMode.PercentOutput, 0);
         armMotor.setNeutralMode(NeutralMode.Brake);
     }
 
@@ -51,6 +60,10 @@ public class ArmSubsystem extends SubsystemBase{
     }
 
     public Modes advanceMode(){
+        if (lowPassFilter.calculate(0.02) >= 0.2){
+            return Modes.HOLD_POSITION;
+        }
+
         switch(mode){
             case PID:
                 return Modes.PID;
@@ -58,8 +71,10 @@ public class ArmSubsystem extends SubsystemBase{
                 return Modes.HOLD_POSITION;
             case COAST:
                 return Modes.COAST;
+            default:
+                return null;
         }
-        return null;
+        
     }
 
     public void applyMode(Modes mode){
@@ -72,6 +87,8 @@ public class ArmSubsystem extends SubsystemBase{
                 break;
             case COAST:
                 coastMotors();
+                break;
+            case MANUAL:
                 break;
         }
     }
