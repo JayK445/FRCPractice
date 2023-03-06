@@ -44,13 +44,12 @@ public class DrivebaseCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
+    m_subsystem.setMode(null);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute(){
-    m_subsystem.drive(ySpeed.getAsDouble(), xSpeed.getAsDouble(), zRotation.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.

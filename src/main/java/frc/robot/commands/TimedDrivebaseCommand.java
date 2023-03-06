@@ -5,10 +5,6 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.DrivebaseSubsystem;
-
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -20,7 +16,7 @@ public class TimedDrivebaseCommand extends CommandBase {
   private double duration;
   private Timer m_Timer;
   private double xSpeed, ySpeed, zRotation;
-  private PathPlannerTrajectory path;
+  //private PathPlannerTrajectory path;
 
   /**
    * Creates a new ExampleCommand.
@@ -36,7 +32,7 @@ public class TimedDrivebaseCommand extends CommandBase {
     this.zRotation = zRotation;
 
     m_Timer = new Timer();
-    path = PathPlanner.loadPath("New Path", 1, 1);
+    //path = PathPlanner.loadPath("New Path", 1, 1);
     addRequirements(m_subsystem);
   }
 
@@ -49,7 +45,7 @@ public class TimedDrivebaseCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute(){
-    m_subsystem.drive(xSpeed, ySpeed, zRotation);
+    m_subsystem.drivePeriodic(xSpeed, ySpeed, zRotation);
   }
 
   // Called once the command ends or is interrupted.

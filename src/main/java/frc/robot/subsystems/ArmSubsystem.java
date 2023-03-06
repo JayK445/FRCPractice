@@ -74,7 +74,6 @@ public class ArmSubsystem extends SubsystemBase{
             default:
                 return null;
         }
-        
     }
 
     public void applyMode(Modes mode){
