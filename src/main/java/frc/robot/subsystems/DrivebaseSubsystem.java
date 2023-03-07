@@ -6,14 +6,22 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
+
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.Ports;
 
 public class DrivebaseSubsystem extends SubsystemBase {
+  private final ShuffleboardTab driveBaseShuffleboard = Shuffleboard.getTab("Drive");
   private MecanumDrive drivebase;  
   private WPI_PigeonIMU gyro;
   private WPI_TalonSRX frontLeft, frontRight, backLeft, backRight;
+  private LinearFilter filter;
+  private double filterOutput;
+  private double statorCurrent;
 
   public DrivebaseSubsystem() {
     // construct motors
@@ -22,8 +30,15 @@ public class DrivebaseSubsystem extends SubsystemBase {
     backLeft = new WPI_TalonSRX(Ports.BACK_LEFT_MOTOR_PORT);
     backRight = new WPI_TalonSRX(Ports.BACK_RIGHT_MOTOR_PORT);
     gyro = new WPI_PigeonIMU(frontLeft);
+    filter = LinearFilter.movingAverage(5);
+    statorCurrent = (frontLeft.getStatorCurrent() + frontRight.getStatorCurrent() + 
+    backLeft.getStatorCurrent() + backRight.getStatorCurrent())/4;
+    filterOutput = 0;
 
     drivebase = new MecanumDrive(frontLeft, backLeft, frontRight, backRight);
+  
+    driveBaseShuffleboard.addNumber("Stator Current", () -> statorCurrent);
+    driveBaseShuffleboard.addNumber("FilterOutput", () -> filterOutput);
     
   }
 
