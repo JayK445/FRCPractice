@@ -5,6 +5,8 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.DrivebaseSubsystem;
+import frc.robot.subsystems.DrivebaseSubsystem.DrivebaseModes;
+
 import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -44,7 +46,8 @@ public class DrivebaseCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_subsystem.setMode(null);
+    m_subsystem.setStatorLimit(0.5);
+    m_subsystem.setMode(DrivebaseModes.MANUAL);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

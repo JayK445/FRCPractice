@@ -40,9 +40,10 @@ public class DrivebaseSubsystem extends SubsystemBase {
     statorCurrent = motor.getStatorCurrent();
     filterOutput = lowPassFilter.calculate(0.02);
 
-    statorLimit = 0.5;
     shuffleboard = Shuffleboard.getTab("Drivebase Subsystem");
     shuffleboard.add("Stator Current Limit", statorLimit);
+    shuffleboard.addNumber("Front Left Stator Current", frontLeft::getStatorCurrent);
+    shuffleboard.addNumber("Filter Output", () -> lowPassFilter.calculate(0.02));
   }
 
   public void drivePeriodic(double xSpeed, double ySpeed, double zRotation){
@@ -53,6 +54,9 @@ public class DrivebaseSubsystem extends SubsystemBase {
     return gyro;
   }
 
+  public void setStatorLimit(double statorLimit){
+    this.statorLimit = statorLimit;
+  }
   public void setMode(DrivebaseModes mode){
     this.mode = mode;
   }
@@ -69,8 +73,6 @@ public class DrivebaseSubsystem extends SubsystemBase {
     }
 
     switch(mode){
-        case MANUAL:
-            return DrivebaseModes.MANUAL;
         case REVERSING:
             return DrivebaseModes.REVERSING;
         default:
