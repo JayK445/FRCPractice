@@ -46,7 +46,24 @@ public class DrivebaseSubsystem extends SubsystemBase {
   }
 
   public void reversingPeriodic(){
-    drivebase.driveCartesian(0, -0.25, 0);
+    double xReverse = 0;
+    double yReverse = 0;
+
+    if (xDoubleSupplier.getAsDouble() < 0){
+      xReverse = -0.4;
+    }
+    else if (xDoubleSupplier.getAsDouble() > 0){
+      xReverse  = 0.4;
+    }
+
+    if (yDoubleSupplier.getAsDouble() < 0){
+      yReverse = -0.4;
+    }
+    else if (yDoubleSupplier.getAsDouble() > 0){
+      yReverse  = 0.4;
+    }
+
+    drivebase.driveCartesian(xReverse, yReverse, 0);
   }
 
   public WPI_PigeonIMU getGyro(){

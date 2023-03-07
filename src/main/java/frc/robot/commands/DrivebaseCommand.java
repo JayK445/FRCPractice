@@ -19,6 +19,7 @@ public class DrivebaseCommand extends CommandBase {
   private DoubleSupplier ySpeed;
   private DoubleSupplier xSpeed;
   private DoubleSupplier zRotation;
+  private double statorLimit;
   private ShuffleboardTab tab = Shuffleboard.getTab("Drivebase");
 
   /**
@@ -38,6 +39,7 @@ public class DrivebaseCommand extends CommandBase {
     tab.addNumber("xSpeed", this.xSpeed);
     tab.addNumber("zRotation", this.zRotation);
     tab.add("Gyro", m_subsystem.getGyro());
+    tab.add("Stator Limit", statorLimit);
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_subsystem);
@@ -46,7 +48,7 @@ public class DrivebaseCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_subsystem.setStatorLimit(0.5);
+    m_subsystem.setStatorLimit(statorLimit);
     m_subsystem.setMode(DrivebaseModes.MANUAL);
   }
 
