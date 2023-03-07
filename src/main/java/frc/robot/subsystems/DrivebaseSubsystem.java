@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.math.filter.LinearFilter;
 import frc.robot.Constants.Ports;
 
 public class DrivebaseSubsystem extends SubsystemBase {
@@ -35,6 +36,9 @@ public class DrivebaseSubsystem extends SubsystemBase {
     backRight = new WPI_TalonSRX(Ports.BACK_RIGHT_MOTOR_PORT);
     gyro = new WPI_PigeonIMU(frontLeft);
     drivebase = new MecanumDrive(frontLeft, backLeft, frontRight, backRight);
+    lowPassFilter = LinearFilter.movingAverage(5)
+    statorCurrent = motor.getStatorCurrent();
+    filterOutput = lowPassFilter.calculate(0.02);
 
     statorLimit = 0.5;
     shuffleboard = Shuffleboard.getTab("Drivebase Subsystem");
