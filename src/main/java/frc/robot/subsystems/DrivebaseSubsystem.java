@@ -48,7 +48,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
     drivebase.driveCartesian(xSpeed, ySpeed, zRotation, gyro.getRotation2d());
   }
 
-  public void reversePeriodic(){
+  public void reversingPeriodic(){
     drivebase.driveCartesian(0, -0.25, 0);
   }
 
@@ -88,10 +88,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   private void applyMode(DrivebaseModes modes){
     switch(modes){
-      case MANUAL:
-        drivePeriodic(xDoubleSupplier.getAsDouble(), yDoubleSupplier.getAsDouble(), zDoubleSupplier.getAsDouble());
       case REVERSING:
-        drivePeriodic(statorLimit, statorLimit, statorLimit);
+        reversingPeriodic();
       default:
         drivePeriodic(xDoubleSupplier.getAsDouble(), yDoubleSupplier.getAsDouble(), zDoubleSupplier.getAsDouble());
     }
