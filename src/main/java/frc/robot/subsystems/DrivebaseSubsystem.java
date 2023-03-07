@@ -22,6 +22,14 @@ public class DrivebaseSubsystem extends SubsystemBase {
   private LinearFilter filter;
   private double filterOutput;
   private double statorCurrent;
+  private Modes mode;
+  private double xSpeed, ySpeed, zRotation;
+  private double statorLimit;
+
+  public enum Modes{
+    MANUAL,
+    REVERSE;
+  }
 
   public DrivebaseSubsystem() {
     // construct motors
@@ -29,30 +37,68 @@ public class DrivebaseSubsystem extends SubsystemBase {
     frontRight = new WPI_TalonSRX(Ports.FRONT_RIGHT_MOTOR_PORT);
     backLeft = new WPI_TalonSRX(Ports.BACK_LEFT_MOTOR_PORT);
     backRight = new WPI_TalonSRX(Ports.BACK_RIGHT_MOTOR_PORT);
+   
     gyro = new WPI_PigeonIMU(frontLeft);
+    
     filter = LinearFilter.movingAverage(5);
     statorCurrent = (frontLeft.getStatorCurrent() + frontRight.getStatorCurrent() + 
     backLeft.getStatorCurrent() + backRight.getStatorCurrent())/4;
     filterOutput = 0;
+    statorLimit = 50;
+
+    mode = Modes.MANUAL;
 
     drivebase = new MecanumDrive(frontLeft, backLeft, frontRight, backRight);
   
     driveBaseShuffleboard.addNumber("Stator Current", () -> statorCurrent);
     driveBaseShuffleboard.addNumber("FilterOutput", () -> filterOutput);
-    
   }
-
+  
   public void drive (double xSpeed, double ySpeed, double zRotation){
-    drivebase.driveCartesian(xSpeed, ySpeed, zRotation, gyro.getRotation2d());
+    this.xSpeed = xSpeed;
+    this.ySpeed = ySpeed;
+    this.zRotation = zRotation;
   }
 
   public WPI_PigeonIMU getGyro(){
     return gyro;
   }
+  
+  public void setMode(Modes mode){
+    this.mode = mode;
+}
+
+  private void manualPeriodic(){
+    drivebase.driveCartesian(xSpeed, ySpeed, zRotation, gyro.getRotation2d());
+  }
+
+  private void reversePeriodic(){
+    xSpeed = -xSpeed;
+    ySpeed = -ySpeed;
+    zRotation = 0;
+    drivebase.driveCartesian(xSpeed, ySpeed, zRotation, gyro.getRotation2d());
+  }
+
+  private void applyMode(Modes mode){
+    switch(mode){
+      case MANUAL:
+      manualPeriodic();
+      break;
+      case REVERSE:
+      reversePeriodic();
+      break;
+    }
+  }
 
   @Override
-  public void periodic() {}
-
-  @Override
-  public void simulationPeriodic() {}
+  public void periodic() {
+    this.filterOutput = this.filter.calculate(statorCurrent);
+    if (filterOutput >= statorLimit){
+      mode = Modes.REVERSE;
+    }
+    else {
+      mode = Modes.MANUAL;
+    }
+    applyMode(mode);
+  }
 }
