@@ -5,10 +5,8 @@
 package frc.robot.subsystems;
 
 import java.util.function.DoubleSupplier;
-
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
-
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -47,6 +45,10 @@ public class DrivebaseSubsystem extends SubsystemBase {
     drivebase.driveCartesian(xSpeed, ySpeed, zRotation, gyro.getRotation2d());
   }
 
+  public void reversePeriodic(){
+    drivebase.driveCartesian(0, -0.25, 0);
+  }
+
   public WPI_PigeonIMU getGyro(){
     return gyro;
   }
@@ -66,15 +68,19 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   public DrivebaseModes advanceMode(){
     if (lowPassFilter.calculate(0.02) >= statorLimit){
-        return DrivebaseModes.REVERSING;
+      return DrivebaseModes.REVERSING;
     }
-
+    else{
+      return DrivebaseModes.MANUAL;
+    }
+    /*
     switch(mode){
-        case REVERSING:
-            return DrivebaseModes.REVERSING;
-        default:
-            return DrivebaseModes.MANUAL;
+    case REVERSING:
+        return DrivebaseModes.REVERSING;
+    case MANUAL:
+        return DrivebaseModes.MANUAL;
     }
+     */
   }
 
   private void applyMode(DrivebaseModes modes){
