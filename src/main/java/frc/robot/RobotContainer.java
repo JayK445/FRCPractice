@@ -51,7 +51,7 @@ public class RobotContainer {
    */
 
   private void configureButtonBindings() {
-    controller_1.x().onTrue(autoSelector.getSelected());
+    //controller_1.x().onTrue(autoSelector.getSelected());
     controller_1.y().onTrue(new ArmCommand(m_armSubsystem, 0, 0, Modes.COAST));
     controller_1.a().onTrue(new ArmCommand(m_armSubsystem, 90, 0.5, Modes.PID));
     controller_1.b().onTrue(new ArmCommand(m_armSubsystem, 0, 0, Modes.HOLD_POSITION));
@@ -68,9 +68,10 @@ public class RobotContainer {
     // An ExampleCommand will run in autonomous
     return autoSelector.getSelected();
   }
-
+  /*
   public void setupAutonomousCommand(){
     autoSelector.setDefaultOption("Auto Test", new SequentialCommand(m_drivebaseSubsystem, m_armSubsystem, autoSelector.getSelected()));
     commandSelector.add("Auto Selector", autoSelector);
   }
+  */
 }

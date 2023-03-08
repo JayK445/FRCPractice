@@ -33,13 +33,17 @@ public class DrivebaseCommand extends CommandBase {
     this.ySpeed = ySpeed;
     this.xSpeed = xSpeed;
     this.zRotation = zRotation;
+    statorLimit = 5;
+    m_subsystem.setInputs(xSpeed, ySpeed, zRotation);
 
     tab = Shuffleboard.getTab("Drivebase");
-    tab.addNumber("ySpeed", this.ySpeed);
-    tab.addNumber("xSpeed", this.xSpeed);
-    tab.addNumber("zRotation", this.zRotation);
-    tab.add("Gyro", m_subsystem.getGyro());
+    tab.addNumber("ySpeed", xSpeed);
+    tab.addNumber("xSpeed", ySpeed);
+    tab.addNumber("zRotation", zRotation);
+    tab.addNumber("Gyro", () -> m_subsystem.getGyro().getAngle());
     tab.add("Stator Limit", statorLimit);
+    tab.addNumber("Stator Current", () -> m_subsystem.getFrontLeftMotor().getStatorCurrent());
+    tab.addNumber("Filter Output", () -> m_subsystem.getFilter().calculate(0.02));
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_subsystem);

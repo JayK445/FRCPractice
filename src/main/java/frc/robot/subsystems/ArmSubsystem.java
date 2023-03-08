@@ -22,6 +22,7 @@ public class ArmSubsystem extends SubsystemBase{
 
     public ArmSubsystem(){
         armMotor = new TalonFX(Ports.ARM_MOTOR_PORT);
+        mode = Modes.PID;
         m_PIDController = new PIDController(0.0004, 0, 0);
         lowPassFilter = LinearFilter.movingAverage(5);
         highPassFilter = LinearFilter.highPass(0.1, 0.02);
@@ -59,12 +60,12 @@ public class ArmSubsystem extends SubsystemBase{
         armMotor.setNeutralMode(NeutralMode.Coast);
     }
 
-    public Modes advanceMode(){
+    public Modes advanceMode(Modes modes){
         if (lowPassFilter.calculate(0.02) >= 0.2){
             return Modes.HOLD_POSITION;
         }
 
-        switch(mode){
+        switch(modes){
             case PID:
                 return Modes.PID;
             case HOLD_POSITION:
@@ -95,7 +96,7 @@ public class ArmSubsystem extends SubsystemBase{
     public void initialize(){}
 
     public void periodic(){
-        mode = advanceMode();
+        mode = advanceMode(mode);
         applyMode(mode);
     }
 
