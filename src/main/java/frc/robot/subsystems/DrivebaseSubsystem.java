@@ -5,7 +5,6 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
@@ -16,8 +15,7 @@ import frc.robot.Constants.Ports;
 
 public class DrivebaseSubsystem extends SubsystemBase {
   private final ShuffleboardTab driveBaseShuffleboard = Shuffleboard.getTab("Drive");
-  private MecanumDrive drivebase;  
-  private WPI_PigeonIMU gyro;
+  private MecanumDrive drivebase;
   private WPI_TalonSRX frontLeft, frontRight, backLeft, backRight;
   private LinearFilter filter;
   private double filterOutput;
@@ -38,8 +36,6 @@ public class DrivebaseSubsystem extends SubsystemBase {
     backLeft = new WPI_TalonSRX(Ports.BACK_LEFT_MOTOR_PORT);
     backRight = new WPI_TalonSRX(Ports.BACK_RIGHT_MOTOR_PORT);
    
-    gyro = new WPI_PigeonIMU(frontLeft);
-    
     filter = LinearFilter.movingAverage(5);
     statorCurrent = (frontLeft.getStatorCurrent() + frontRight.getStatorCurrent() + 
     backLeft.getStatorCurrent() + backRight.getStatorCurrent())/4;
@@ -59,24 +55,20 @@ public class DrivebaseSubsystem extends SubsystemBase {
     this.ySpeed = ySpeed;
     this.zRotation = zRotation;
   }
-
-  public WPI_PigeonIMU getGyro(){
-    return gyro;
-  }
   
   public void setMode(Modes mode){
     this.mode = mode;
 }
 
   private void manualPeriodic(){
-    drivebase.driveCartesian(xSpeed, ySpeed, zRotation, gyro.getRotation2d());
+    drivebase.driveCartesian(xSpeed, ySpeed, zRotation);
   }
 
   private void reversePeriodic(){
-    xSpeed = -xSpeed;
-    ySpeed = -ySpeed;
-    zRotation = 0;
-    drivebase.driveCartesian(xSpeed, ySpeed, zRotation, gyro.getRotation2d());
+    double reverseXSpeed = -xSpeed;
+    double reverseYSpeed = -ySpeed;
+    double reverseZRotation = 0;
+    drivebase.driveCartesian(reverseXSpeed, reverseYSpeed, reverseZRotation);
   }
 
   private void applyMode(Modes mode){
