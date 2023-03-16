@@ -5,12 +5,8 @@
 package frc.robot.subsystems;
 
 import java.util.function.DoubleSupplier;
-
-import javax.sound.sampled.Line;
-
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
-
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -24,6 +20,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
   private LinearFilter lowPassFilter;
   private DrivebaseModes mode;
   private double statorLimit;
+  private double filterOutput;
   public enum DrivebaseModes{MANUAL, REVERSING}
 
   public DrivebaseSubsystem() {
@@ -37,6 +34,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
     gyro = new AHRS();
     drivebase = new MecanumDrive(frontLeft, backLeft, frontRight, backRight);
     lowPassFilter = LinearFilter.movingAverage(5);
+    filterOutput = lowPassFilter.calculate(frontLeft.getStatorCurrent());
   }
 
   public void drivePeriodic(double xSpeed, double ySpeed, double zRotation){
@@ -72,8 +70,16 @@ public class DrivebaseSubsystem extends SubsystemBase {
     return frontLeft;
   }
 
+  public double fLStatorCurrent(){
+    return frontLeft.getStatorCurrent();
+  }
+
   public LinearFilter getFilter(){
     return lowPassFilter;
+  }
+
+  public double getFilterOutput(){
+    return filterOutput;
   }
 
   public void setStatorLimit(double statorLimit){
@@ -91,7 +97,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
   }
 
   public DrivebaseModes advanceMode(){
-    if (lowPassFilter.calculate(0.02) >= statorLimit || lowPassFilter.calculate(0.02) <= -statorLimit){
+    if (filterOutput >= statorLimit){
       return DrivebaseModes.REVERSING;
     }
     else{
@@ -118,7 +124,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    //drivePeriodic(xDoubleSupplier.getAsDouble(), yDoubleSupplier.getAsDouble(), zDoubleSupplier.getAsDouble());
+    
     mode = advanceMode();
     applyMode(mode);
   }

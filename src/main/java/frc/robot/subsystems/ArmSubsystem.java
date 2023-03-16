@@ -14,6 +14,7 @@ public class ArmSubsystem extends SubsystemBase{
     private PIDController m_PIDController;
     private TalonFX armMotor;
     private double desiredAngle;
+    private double filterOutput;
     private ShuffleboardTab armShuffleboard = Shuffleboard.getTab("Arm");
     private Modes mode;
     private LinearFilter lowPassFilter;
@@ -58,6 +59,10 @@ public class ArmSubsystem extends SubsystemBase{
 
     public void coastMotors(){
         armMotor.setNeutralMode(NeutralMode.Coast);
+    }
+
+    public double getFilterOutput(){
+        return filterOutput;
     }
 
     public Modes advanceMode(Modes modes){
