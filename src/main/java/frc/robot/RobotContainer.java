@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.Ports;
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.DrivebaseCommand;
-import frc.robot.commands.SequentialCommand;
+import frc.robot.commands.SequentialTimedCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DrivebaseSubsystem;
 import frc.robot.subsystems.ArmSubsystem.Modes;
@@ -39,7 +39,7 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
     m_drivebaseSubsystem.setDefaultCommand(new DrivebaseCommand(
-      m_drivebaseSubsystem, controller_1::getLeftX, controller_1::getLeftY, controller_1::getRightX));
+      m_drivebaseSubsystem, controller_1::getLeftY, controller_1::getLeftX, controller_1::getRightX));
   }
 
   /**
@@ -51,11 +51,11 @@ public class RobotContainer {
    */
 
   private void configureButtonBindings() {
-    controller_1.x().onTrue(autoSelector.getSelected());
+    // controller_1.x().onTrue(autoSelector.getSelected());
     controller_1.y().onTrue(new ArmCommand(m_armSubsystem, 0, 0, Modes.COAST));
     controller_1.a().onTrue(new ArmCommand(m_armSubsystem, 90, 0.5, Modes.PID));
     controller_1.b().onTrue(new ArmCommand(m_armSubsystem, 0, 0, Modes.HOLD_POSITION));
-    controller_1.rightBumper().onTrue((new SequentialCommand(m_drivebaseSubsystem, m_armSubsystem, autoSelector.getSelected())));
+    controller_1.rightBumper().onTrue((new SequentialTimedCommand(m_drivebaseSubsystem, m_armSubsystem)));
   }
 
   /**
@@ -70,7 +70,7 @@ public class RobotContainer {
   }
 
   public void setupAutonomousCommand(){
-    autoSelector.setDefaultOption("Auto Test", new SequentialCommand(m_drivebaseSubsystem, m_armSubsystem, autoSelector.getSelected()));
+    autoSelector.setDefaultOption("Auto Test", new SequentialTimedCommand(m_drivebaseSubsystem, m_armSubsystem));
     commandSelector.add("Auto Selector", autoSelector);
   }
 }

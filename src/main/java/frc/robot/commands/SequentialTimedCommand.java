@@ -11,7 +11,7 @@ import frc.robot.subsystems.DrivebaseSubsystem;
 import frc.robot.subsystems.ArmSubsystem.Modes; 
 
 /** An example command that uses an example subsystem. */
-public class SequentialCommand extends SequentialCommandGroup {
+public class SequentialTimedCommand extends SequentialCommandGroup {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private DrivebaseSubsystem m_DrivebaseSubsystem;
   private ArmSubsystem m_ArmSubsystem;
@@ -23,7 +23,7 @@ public class SequentialCommand extends SequentialCommandGroup {
    * @param subsystem The subsystem used by this command.
    */
   
-  public SequentialCommand(DrivebaseSubsystem drivebaseSubsystem, ArmSubsystem armSubsystem, Command command) {
+  public SequentialTimedCommand(DrivebaseSubsystem drivebaseSubsystem, ArmSubsystem armSubsystem) {
     m_DrivebaseSubsystem = drivebaseSubsystem;
     m_ArmSubsystem = armSubsystem;
     addCommands(new TimedDrivebaseCommand(m_DrivebaseSubsystem, 0.3, 0, 0, 1.5), 

@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.Ports;
 
 public class DrivebaseSubsystem extends SubsystemBase {
-  private final ShuffleboardTab driveBaseShuffleboard = Shuffleboard.getTab("Drive");
+  private final ShuffleboardTab driveBaseShuffleboard;
   private MecanumDrive drivebase;
   private WPI_TalonSRX frontLeft, frontRight, backLeft, backRight;
   private LinearFilter filter;
@@ -35,25 +35,32 @@ public class DrivebaseSubsystem extends SubsystemBase {
     frontRight = new WPI_TalonSRX(Ports.FRONT_RIGHT_MOTOR_PORT);
     backLeft = new WPI_TalonSRX(Ports.BACK_LEFT_MOTOR_PORT);
     backRight = new WPI_TalonSRX(Ports.BACK_RIGHT_MOTOR_PORT);
+
+    frontRight.setInverted(true);
+    backRight.setInverted(true);
    
     filter = LinearFilter.movingAverage(5);
     statorCurrent = (frontLeft.getStatorCurrent() + frontRight.getStatorCurrent() + 
     backLeft.getStatorCurrent() + backRight.getStatorCurrent())/4;
     filterOutput = 0;
-    statorLimit = 50;
+    statorLimit = 1.4;
 
     mode = Modes.MANUAL;
 
     drivebase = new MecanumDrive(frontLeft, backLeft, frontRight, backRight);
-  
+    driveBaseShuffleboard = Shuffleboard.getTab("Drive");
     driveBaseShuffleboard.addNumber("Stator Current", () -> statorCurrent);
-    driveBaseShuffleboard.addNumber("FilterOutput", () -> filterOutput);
+    driveBaseShuffleboard.addNumber("Filter Output", () -> filterOutput);
   }
   
   public void drive (double xSpeed, double ySpeed, double zRotation){
     this.xSpeed = xSpeed;
     this.ySpeed = ySpeed;
     this.zRotation = zRotation;
+  }
+
+  private double getStatorCurrentAverage(){
+    return (frontLeft.getStatorCurrent() + frontRight.getStatorCurrent() + backLeft.getStatorCurrent() + backRight.getStatorCurrent() / 4);
   }
   
   public void setMode(Modes mode){
@@ -66,7 +73,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   private void reversePeriodic(){
     double reverseXSpeed = -xSpeed;
-    double reverseYSpeed = -ySpeed;
+    double reverseYSpeed = 0;
     double reverseZRotation = 0;
     drivebase.driveCartesian(reverseXSpeed, reverseYSpeed, reverseZRotation);
   }
@@ -84,6 +91,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    statorCurrent = getStatorCurrentAverage();
     this.filterOutput = this.filter.calculate(statorCurrent);
     if (filterOutput >= statorLimit){
       mode = Modes.REVERSE;

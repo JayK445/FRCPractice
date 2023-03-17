@@ -17,18 +17,18 @@ public class ArmSubsystem extends SubsystemBase{
     private ShuffleboardTab armShuffleboard = Shuffleboard.getTab("Arm");
     private Modes mode;
     private LinearFilter lowPassFilter;
-    private LinearFilter highPassFilter;
+    private double filterOutput;
     public enum Modes{PID, MANUAL, HOLD_POSITION, COAST}
 
     public ArmSubsystem(){
         armMotor = new TalonFX(Ports.ARM_MOTOR_PORT);
         m_PIDController = new PIDController(0.0004, 0, 0);
+        filterOutput = 0;
+        mode = Modes.MANUAL;
         lowPassFilter = LinearFilter.movingAverage(5);
-        highPassFilter = LinearFilter.highPass(0.1, 0.02);
         armShuffleboard.add("PID", m_PIDController);
         armShuffleboard.addNumber("Arm Angle", armMotor::getSelectedSensorPosition);
-        armShuffleboard.addNumber("Low Pass Filter", () -> lowPassFilter.calculate(0.02));
-        armShuffleboard.addNumber("High Pass Filter", () -> highPassFilter.calculate(0.02));
+        armShuffleboard.addNumber("Low Pass Filter", () -> filterOutput);
         armShuffleboard.addNumber("Stator Current", armMotor::getStatorCurrent);
         armShuffleboard.add("Target Angle", desiredAngle);
     }
@@ -64,16 +64,7 @@ public class ArmSubsystem extends SubsystemBase{
             return Modes.HOLD_POSITION;
         }
 
-        switch(mode){
-            case PID:
-                return Modes.PID;
-            case HOLD_POSITION:
-                return Modes.HOLD_POSITION;
-            case COAST:
-                return Modes.COAST;
-            default:
-                return null;
-        }
+      return mode;
         
     }
 
@@ -93,9 +84,8 @@ public class ArmSubsystem extends SubsystemBase{
         }
     }
 
-    public void initialize(){}
-
     public void periodic(){
+        filterOutput = lowPassFilter.calculate(armMotor.getStatorCurrent());
         mode = advanceMode();
         applyMode(mode);
     }

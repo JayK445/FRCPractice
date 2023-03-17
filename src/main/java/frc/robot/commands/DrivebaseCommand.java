@@ -23,7 +23,7 @@ public class DrivebaseCommand extends CommandBase {
    * @param subsystem The subsystem used by this command.
    */
   
-  public DrivebaseCommand(DrivebaseSubsystem subsystem, DoubleSupplier ySpeed, DoubleSupplier xSpeed, DoubleSupplier zRotation) {
+  public DrivebaseCommand(DrivebaseSubsystem subsystem, DoubleSupplier xSpeed, DoubleSupplier ySpeed, DoubleSupplier zRotation) {
     m_subsystem = subsystem;
     this.ySpeed = ySpeed;
     this.xSpeed = xSpeed;
@@ -42,7 +42,7 @@ public class DrivebaseCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute(){
-    m_subsystem.drive(ySpeed.getAsDouble(), xSpeed.getAsDouble(), zRotation.getAsDouble());
+    m_subsystem.drive(xSpeed.getAsDouble(), ySpeed.getAsDouble(), zRotation.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.
