@@ -4,35 +4,102 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.DoubleSupplier;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
+import com.ctre.phoenix.sensors.WPI_PigeonIMU;
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
-import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.Ports;
 
 public class DrivebaseSubsystem extends SubsystemBase {
-  
-  private WPI_TalonSRX m_frontLeft, m_frontRight, m_backLeft, m_backRight;
-  private MecanumDrive drivebase;
+  private MecanumDrive drivebase;  
+  private WPI_PigeonIMU gyro;
+  private WPI_TalonSRX frontLeft, frontRight, backLeft, backRight;
+  private DoubleSupplier xDoubleSupplier, yDoubleSupplier, zDoubleSupplier;
+  private LinearFilter lowPassFilter;
+  private DrivebaseModes mode;
+  private ShuffleboardTab shuffleboard;
+  private double statorLimit;
+  private double filterValue;
+  public enum DrivebaseModes{MANUAL, REVERSING}
+
   public DrivebaseSubsystem() {
-    m_frontLeft = new WPI_TalonSRX(3);
-    m_frontRight = new WPI_TalonSRX(1);
-    m_backLeft = new WPI_TalonSRX(6);
-    m_backRight = new WPI_TalonSRX(7);
-    drivebase = new MecanumDrive(m_frontLeft, m_backLeft, m_frontRight, m_backRight);
+    // construct motors
+    frontLeft = new WPI_TalonSRX(Ports.FRONT_LEFT_MOTOR_PORT);
+    frontRight = new WPI_TalonSRX(Ports.FRONT_RIGHT_MOTOR_PORT);
+    backLeft = new WPI_TalonSRX(Ports.BACK_LEFT_MOTOR_PORT);
+    backRight = new WPI_TalonSRX(Ports.BACK_RIGHT_MOTOR_PORT);
+    gyro = new WPI_PigeonIMU(frontLeft);
+    drivebase = new MecanumDrive(frontLeft, backLeft, frontRight, backRight);
+    lowPassFilter = LinearFilter.movingAverage(5);
+
+    shuffleboard = Shuffleboard.getTab("Drivebase Subsystem");
+    shuffleboard.add("Stator Current Limit", statorLimit);
+    shuffleboard.addNumber("Front Left Stator Current", frontLeft::getStatorCurrent);
+    shuffleboard.addNumber("Filter Output", () -> filterValue);
   }
 
-  public void drive(double ySpeed, double xSpeed, double zRotation) {
-   drivebase.driveCartesian(ySpeed, xSpeed, zRotation);
+  public void drivePeriodic(double xSpeed, double ySpeed, double zRotation){
+    drivebase.driveCartesian(xSpeed, ySpeed, zRotation, gyro.getRotation2d());
+  }
+
+  public void reversingPeriodic(){
+    drivebase.driveCartesian(x0, -0.25, 0);
+  }
+
+  public WPI_PigeonIMU getGyro(){
+    return gyro;
+  }
+
+  public void setStatorLimit(double statorLimit){
+    this.statorLimit = statorLimit;
+  }
+  public void setMode(DrivebaseModes mode){
+    this.mode = mode;
+  }
+
+  public void setInputs(DoubleSupplier xDoubleSupplier, DoubleSupplier yDoubleSupplier, DoubleSupplier zDoubleSupplier){
+    this.xDoubleSupplier = xDoubleSupplier;
+    this.yDoubleSupplier = yDoubleSupplier;
+    this.zDoubleSupplier = zDoubleSupplier;
+  }
+
+  public DrivebaseModes advanceMode(){
+    if (filterValue >= statorLimit){
+      return DrivebaseModes.REVERSING;
+    }
+    else{
+      return DrivebaseModes.MANUAL;
+    }
+    /*
+    switch(mode){
+    case REVERSING:
+        return DrivebaseModes.REVERSING;
+    case MANUAL:
+        return DrivebaseModes.MANUAL;
+    }
+     */
+  }
+
+  private void applyMode(DrivebaseModes modes){
+    switch(modes){
+      case REVERSING:
+        reversingPeriodic();
+      default:
+        drivePeriodic(xDoubleSupplier.getAsDouble(), yDoubleSupplier.getAsDouble(), zDoubleSupplier.getAsDouble());
+    }
   }
 
   @Override
   public void periodic() {
-    
+    filterValue = lowPassFilter.calculate(frontLeft::getStatorCurrent);
+    mode = advanceMode();
+    applyMode(mode);
   }
 
   @Override
-  public void simulationPeriodic() {
-    
-  }
+  public void simulationPeriodic() {}
 }
