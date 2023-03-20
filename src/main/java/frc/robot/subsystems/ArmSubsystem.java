@@ -66,7 +66,7 @@ public class ArmSubsystem extends SubsystemBase{
     }
 
     public Modes advanceMode(Modes modes){
-        if (lowPassFilter.calculate(0.02) >= 0.2){
+        if (lowPassFilter.calculate(armMotor.getStatorCurrent()) >= 0.2){
             return Modes.HOLD_POSITION;
         }
 

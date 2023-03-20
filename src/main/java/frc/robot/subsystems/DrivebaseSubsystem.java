@@ -45,6 +45,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
     double xReverse = 0;
     double yReverse = 0;
 
+    /*
     if (xDoubleSupplier.getAsDouble() < 0){
       xReverse = -0.4;
     }
@@ -58,8 +59,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
     else if (yDoubleSupplier.getAsDouble() > 0){
       yReverse  = 0.4;
     }
-
-    drivebase.driveCartesian(xReverse, yReverse, 0);
+    */
+    drivebase.driveCartesian(0.5, 0.5, 0);
   }
 
   public AHRS getGyro(){
@@ -90,6 +91,15 @@ public class DrivebaseSubsystem extends SubsystemBase {
     this.mode = mode;
   }
 
+  public DrivebaseModes checkReversing(){
+    if (filterOutput >= statorLimit){
+      return DrivebaseModes.REVERSING;
+    }
+    else{
+      return DrivebaseModes.MANUAL;
+    }
+  }
+
   public void setInputs(DoubleSupplier xDoubleSupplier, DoubleSupplier yDoubleSupplier, DoubleSupplier zDoubleSupplier){
     this.xDoubleSupplier = xDoubleSupplier;
     this.yDoubleSupplier = yDoubleSupplier;
@@ -97,20 +107,12 @@ public class DrivebaseSubsystem extends SubsystemBase {
   }
 
   public DrivebaseModes advanceMode(){
-    if (filterOutput >= statorLimit){
-      return DrivebaseModes.REVERSING;
-    }
-    else{
-      return DrivebaseModes.MANUAL;
-    }
-    /*
     switch(mode){
     case REVERSING:
         return DrivebaseModes.REVERSING;
-    case MANUAL:
+    default:
         return DrivebaseModes.MANUAL;
     }
-    */
   }
 
   private void applyMode(DrivebaseModes modes){
@@ -124,7 +126,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    
+    filterOutput = lowPassFilter.calculate(frontLeft.getStatorCurrent());
+    mode = checkReversing();
     mode = advanceMode();
     applyMode(mode);
   }
