@@ -8,6 +8,7 @@ import java.util.function.DoubleSupplier;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.filter.LinearFilter;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.Ports;
@@ -21,6 +22,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
   private DrivebaseModes mode;
   private double statorLimit;
   private double filterOutput;
+  private double reverseStart;
+  private Timer timer;
   public enum DrivebaseModes{MANUAL, REVERSING}
 
   public DrivebaseSubsystem() {
@@ -32,6 +35,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
     frontRight.setInverted(true);
     backRight.setInverted(true);
     gyro = new AHRS();
+    timer = new Timer();
     drivebase = new MecanumDrive(frontLeft, backLeft, frontRight, backRight);
     lowPassFilter = LinearFilter.movingAverage(3);
   }
@@ -100,7 +104,10 @@ public class DrivebaseSubsystem extends SubsystemBase {
   }
 
   public DrivebaseModes advanceMode(){
-    if (filterOutput >= 2/*statorLimit*/){
+    if (Math.abs(filterOutput) >= statorLimit && (reverseStart + 1 > timer.getFPGATimestamp() || mode != DrivebaseModes.REVERSING)){
+      if (reverseStart != timer.getFPGATimestamp()){
+        reverseStart = timer.getFPGATimestamp();
+      }
       return DrivebaseModes.REVERSING;
     }
     else{

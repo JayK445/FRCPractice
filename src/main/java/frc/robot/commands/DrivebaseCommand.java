@@ -41,7 +41,7 @@ public class DrivebaseCommand extends CommandBase {
     tab.addNumber("xSpeed", ySpeed);
     tab.addNumber("zRotation", zRotation);
     tab.addNumber("Gyro", () -> m_subsystem.getGyro().getAngle());
-    tab.add("Stator Limit", statorLimit);
+    tab.addNumber("Stator Limit", () -> statorLimit);
     tab.addNumber("Stator Current", () -> m_subsystem.getFLStatorCurrent());
     tab.addNumber("Filter Output", () -> m_subsystem.getFilterOutput());
     tab.addString("Mode", () -> m_subsystem.getMode().toString());
