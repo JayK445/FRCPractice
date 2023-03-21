@@ -33,8 +33,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
     backRight.setInverted(true);
     gyro = new AHRS();
     drivebase = new MecanumDrive(frontLeft, backLeft, frontRight, backRight);
-    lowPassFilter = LinearFilter.movingAverage(5);
-    filterOutput = lowPassFilter.calculate(frontLeft.getStatorCurrent());
+    lowPassFilter = LinearFilter.movingAverage(3);
   }
 
   public void drivePeriodic(double xSpeed, double ySpeed, double zRotation){
@@ -44,23 +43,22 @@ public class DrivebaseSubsystem extends SubsystemBase {
   public void reversingPeriodic(){
     double xReverse = 0;
     double yReverse = 0;
-
-    /*
+    
     if (xDoubleSupplier.getAsDouble() < 0){
-      xReverse = -0.4;
+      xReverse = -0.2;
     }
     else if (xDoubleSupplier.getAsDouble() > 0){
-      xReverse  = 0.4;
+      xReverse  = 0.2;
     }
 
     if (yDoubleSupplier.getAsDouble() < 0){
-      yReverse = -0.4;
+      yReverse = -0.2;
     }
     else if (yDoubleSupplier.getAsDouble() > 0){
-      yReverse  = 0.4;
+      yReverse  = 0.2;
     }
-    */
-    drivebase.driveCartesian(0.5, 0.5, 0);
+    
+    drivebase.driveCartesian(xReverse, yReverse, 0);
   }
 
   public AHRS getGyro(){
@@ -71,7 +69,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
     return frontLeft;
   }
 
-  public double fLStatorCurrent(){
+  public double getFLStatorCurrent(){
     return frontLeft.getStatorCurrent();
   }
 
@@ -91,13 +89,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
     this.mode = mode;
   }
 
-  public DrivebaseModes checkReversing(){
-    if (filterOutput >= statorLimit){
-      return DrivebaseModes.REVERSING;
-    }
-    else{
-      return DrivebaseModes.MANUAL;
-    }
+  public DrivebaseModes getMode(){
+    return mode;
   }
 
   public void setInputs(DoubleSupplier xDoubleSupplier, DoubleSupplier yDoubleSupplier, DoubleSupplier zDoubleSupplier){
@@ -107,12 +100,20 @@ public class DrivebaseSubsystem extends SubsystemBase {
   }
 
   public DrivebaseModes advanceMode(){
+    if (filterOutput >= 2/*statorLimit*/){
+      return DrivebaseModes.REVERSING;
+    }
+    else{
+      return DrivebaseModes.MANUAL;
+    }
+    /*
     switch(mode){
     case REVERSING:
         return DrivebaseModes.REVERSING;
     default:
         return DrivebaseModes.MANUAL;
     }
+    */
   }
 
   private void applyMode(DrivebaseModes modes){
@@ -127,7 +128,6 @@ public class DrivebaseSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     filterOutput = lowPassFilter.calculate(frontLeft.getStatorCurrent());
-    mode = checkReversing();
     mode = advanceMode();
     applyMode(mode);
   }

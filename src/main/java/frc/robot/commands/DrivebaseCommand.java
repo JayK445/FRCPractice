@@ -42,8 +42,9 @@ public class DrivebaseCommand extends CommandBase {
     tab.addNumber("zRotation", zRotation);
     tab.addNumber("Gyro", () -> m_subsystem.getGyro().getAngle());
     tab.add("Stator Limit", statorLimit);
-    tab.addNumber("Stator Current", () -> m_subsystem.getFrontLeftMotor().getStatorCurrent());
+    tab.addNumber("Stator Current", () -> m_subsystem.getFLStatorCurrent());
     tab.addNumber("Filter Output", () -> m_subsystem.getFilterOutput());
+    tab.addString("Mode", () -> m_subsystem.getMode().toString());
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_subsystem);
@@ -53,7 +54,7 @@ public class DrivebaseCommand extends CommandBase {
   @Override
   public void initialize() {
     m_subsystem.setStatorLimit(statorLimit);
-    m_subsystem.setMode(DrivebaseModes.MANUAL);
+    m_subsystem.setMode(DrivebaseModes.REVERSING);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
