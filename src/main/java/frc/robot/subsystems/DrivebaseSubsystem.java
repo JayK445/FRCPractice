@@ -8,7 +8,12 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
+import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
+import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.SPI.Port;
@@ -31,6 +36,17 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   private DriveMode mode = DriveMode.DEFAULT;
 
+  private MecanumDriveKinematics kinematics = 
+    new MecanumDriveKinematics(
+      new Translation2d(0.120, 0.210), 
+      new Translation2d(0.120, -0.210), 
+      new Translation2d(-0.165, 0.210), 
+      new Translation2d(-0.165, -0.210));
+
+  private MecanumDriveOdometry odometry;
+
+  private Pose2d pose;
+
   public DrivebaseSubsystem() {
 
     m_frontLeft = new TalonSRX(3);
@@ -48,6 +64,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
     controller = new PIDController(0.003, 0, 0.0005);
     controller.setSetpoint(0);
     controller.setTolerance(1);
+
+    odometry = new MecanumDriveOdometry(kinematics, getGyroRotation());
 
     zeroGyro();
   }
@@ -115,9 +133,17 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   }
 
+  private void odometryPeriodic() {
+    
+    odometry.update(getGyroRotation(), new MecanumDriveWheelSpeeds());
+    pose = odometry.getPoseMeters();
+
+  }
+
   @Override
   public void periodic() {
-    
+
+    odometryPeriodic();
     updateRotVelocity();
 
     DriveMode currentMode = getMode();
